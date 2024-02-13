@@ -1,3 +1,10 @@
+/*
+
+Courtesy of Markus Lange
+https://github.com/MarkusLange/Teensy_3.x_4.x_and_LC_LIN_Master/
+
+*/
+
 #include "Arduino.h"
 #include "lin_bus.h"
 
