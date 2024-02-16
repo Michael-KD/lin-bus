@@ -1,19 +1,21 @@
 #include "lin.h"
 
+using namespace LIN;
+
 //parity should be bits 6, 7, all other bits are 0
-uint8_t LIN::parity(uint8_t id) {
+uint8_t parity(uint8_t id) {
     int bit6 = ((id >> 0) + (id >> 1) + (id >> 2) + (id >> 4)) & 1;
     int bit7 = ~((id >> 1) + (id >> 3) + (id >> 4) + (id >> 5)) & 1;
     return ((bit6 | (bit7 << 1)) << 6);
 }
 
-LIN::Master::Master(HardwareSerial* serialPort, uint32_t baudRate) {
+Master::Master(HardwareSerial* serialPort, uint32_t baudRate) {
     _serial = serialPort;
     this->baudRate = baudRate;
     _serial->begin(baudRate);
 }
 
-uint8_t* LIN::Master::requestData(uint8_t id) {
+uint8_t* Master::requestData(uint8_t id) {
     uint8_t headerFrame[4] = {0};
     generateHeader(id, headerFrame);
 
@@ -29,7 +31,7 @@ uint8_t* LIN::Master::requestData(uint8_t id) {
    return NULL;
 }
 
-void LIN::Master::generateHeader(uint8_t id, uint8_t* frame) {
+void Master::generateHeader(uint8_t id, uint8_t* frame) {
     // break, 13 dominant bits (nominal) followed by a break delimiter of one bit (nominal) recessive
     frame[0] = 0x3f;
     frame[1] = 0xff;
@@ -43,34 +45,34 @@ void LIN::Master::generateHeader(uint8_t id, uint8_t* frame) {
 
 // =============================================================================================== //
 
-LIN::Puppet::Puppet(HardwareSerial* serialPort, uint8_t id, uint32_t baudRate) {
+Puppet::Puppet(HardwareSerial* serialPort, uint8_t id, uint32_t baudRate) {
     _serial = serialPort;
     this->id = id;
     this->baudRate = baudRate;
     _serial->begin(baudRate);
 }
 
-bool LIN::Puppet::getDataRequested() {
+bool Puppet::getDataRequested() {
     //checks bus buffer for input, add to internal buffer
     //if buffer is complete, check PID and handle accordingly
     uint8_t id = 0; //TODO
-    LIN::Puppet::compareID(id);
+    Puppet::compareID(id);
 
     return false;
 }
 
-void LIN::Puppet::reply(uint8_t* data) {
+void Puppet::reply(uint8_t* data) {
     uint8_t frame[DATA_SIZE + 1] = {0};
-    LIN::Puppet::generateResponse(data, frame);
+    Puppet::generateResponse(data, frame);
 }
 
-void LIN::Puppet::generateResponse(uint8_t* data, uint8_t* frame) {
+void Puppet::generateResponse(uint8_t* data, uint8_t* frame) {
     frame[0] = 0;
     //populate 
     //generate CRC
 }
 
-bool LIN::Puppet::compareID(uint8_t id) {
+bool Puppet::compareID(uint8_t id) {
     //check if ID is the same as this puppet's ID, check parity
     if (parity(id) == (id & 0xc0)) {
         if (id == this->id) {
