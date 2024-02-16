@@ -3,6 +3,13 @@
 
 using namespace LIN_Utils;
 
+//parity should be bits 6, 7, all other bits are 0
+uint8_t parity(uint8_t id) {
+    int bit6 = ((id >> 0) + (id >> 1) + (id >> 2) + (id >> 4)) & 1;
+    int bit7 = ~((id >> 1) + (id >> 3) + (id >> 4) + (id >> 5)) & 1;
+    return ((bit6 | (bit7 << 1)) << 6);
+}
+
 LIN_Master::LIN_Master(HardwareSerial* serialPort, uint32_t baudRate) {
     _serial = serialPort;
     this->baudRate = baudRate;
@@ -37,13 +44,6 @@ void LIN_Master::generateHeader(uint8_t id, uint8_t* frame) {
     frame[3] = (id & 0x3f) | parity(id);
 }
 
-//parity should be bits 6, 7, all other bits are 0
-uint8_t parity(uint8_t id) {
-    int bit6 = ((id >> 0) + (id >> 1) + (id >> 2) + (id >> 4)) & 1;
-    int bit7 = ~((id >> 1) + (id >> 3) + (id >> 4) + (id >> 5)) & 1;
-    return ((bit6 | (bit7 << 1)) << 6);
-}
-
 // =============================================================================================== //
 
 LIN_Puppet::LIN_Puppet(HardwareSerial* serialPort, uint8_t id, uint32_t baudRate) {
@@ -58,7 +58,7 @@ bool LIN_Puppet::getDataRequested() {
     //if buffer is complete, check PID and handle accordingly
     uint8_t id = 0; //TODO
     LIN_Puppet::compareID(id);
-    
+
     return false;
 }
 
