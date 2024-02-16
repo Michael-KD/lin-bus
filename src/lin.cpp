@@ -1,7 +1,6 @@
-#include <Arduino.h>
 #include "lin.h"
 
-using namespace LIN_Utils;
+using namespace LIN;
 
 //parity should be bits 6, 7, all other bits are 0
 uint8_t parity(uint8_t id) {
@@ -75,7 +74,7 @@ void LIN_Puppet::generateResponse(uint8_t* data, uint8_t* frame) {
 
 bool LIN_Puppet::compareID(uint8_t id) {
     //check if ID is the same as this puppet's ID, check parity
-    if (LIN_Utils::parity(id) == (id & 0xc0)) {
+    if (parity(id) == (id & 0xc0)) {
         if (id == this->id) {
             return true;
         }
