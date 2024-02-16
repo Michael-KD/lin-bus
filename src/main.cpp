@@ -1,5 +1,4 @@
 #include <Arduino.h>
-#include "lin_bus.h"
 
 const uint32_t BAUD_RATE = 19200;
 
@@ -12,9 +11,6 @@ const uint8_t LIN_CS = 3;
 //ids (no particular order lol)
 const uint8_t CONTROLLER_ID = 0x3a;
 const uint8_t NODE_ID = 0x3b;
-
-LIN lin(&Serial1, 19200);
-
 
 void setup() {
   Serial.begin(9600);
