@@ -9,6 +9,25 @@ uint8_t parity(uint8_t id) {
     return ((bit6 | (bit7 << 1)) << 6);
 }
 
+uint8_t CRC(uint8_t* data) {
+    return 0;
+}
+
+uint64_t scan(uint8_t* pattern, uint8_t* data, size_t patternLength, size_t dataLength) {
+    return false;
+}
+
+//patternMask should be a bitmask where all bits in the pattern are 1
+int32_t scan(uint64_t pattern, uint64_t data, uint64_t patternMask, size_t patternLength) {
+    for (size_t i = 0; i <= (64 - patternLength); i++) {
+        if (pattern == ((data >> i) & patternMask)) {
+            return i;
+        }
+    }
+    return -1;
+}
+    
+
 Master::Master(HardwareSerial* serialPort, uint32_t baudRate) {
     _serial = serialPort;
     this->baudRate = baudRate;
@@ -34,7 +53,7 @@ uint8_t* Master::requestData(uint8_t id) {
 void Master::generateHeader(uint8_t id, uint8_t* frame) {
     // break, 13 dominant bits (nominal) followed by a break delimiter of one bit (nominal) recessive
     frame[0] = 0x3f;
-    frame[1] = 0xff;
+    frame[1] = 0xfe;
     
     // sync, x55
     frame[2] = 0x55;
@@ -50,13 +69,28 @@ Puppet::Puppet(HardwareSerial* serialPort, uint8_t id, uint32_t baudRate) {
     this->id = id;
     this->baudRate = baudRate;
     _serial->begin(baudRate);
+    headerDetectionBuffer = 0;
 }
 
-bool Puppet::getDataRequested() {
+bool Puppet::dataHasBeenRequested() {
     //checks bus buffer for input, add to internal buffer
+    int32_t headerIndex = -1;
+    while (_serial->available()) {
+        uint8_t incByte = _serial->read();
+        headerDetectionBuffer = (headerDetectionBuffer << 8) | incByte;
+        headerIndex = scan(0x3ffe55, headerDetectionBuffer, 0x8fffff, 23);
+        if (headerIndex != -1) {
+            break;
+        }
+    }
+
     //if buffer is complete, check PID and handle accordingly
-    uint8_t id = 0; //TODO
-    Puppet::compareID(id);
+    if(headerIndex != -1) {
+        uint8_t id = uint8_t((headerDetectionBuffer >> headerIndex) & 0xff);
+        headerDetectionBuffer = 0; //reset buffer
+        if (Puppet::compareID(id))
+            return true;
+    }
 
     return false;
 }
@@ -64,12 +98,14 @@ bool Puppet::getDataRequested() {
 void Puppet::reply(uint8_t* data) {
     uint8_t frame[DATA_SIZE + 1] = {0};
     Puppet::generateResponse(data, frame);
+    _serial->write(frame, DATA_SIZE + 1);
 }
 
 void Puppet::generateResponse(uint8_t* data, uint8_t* frame) {
-    frame[0] = 0;
-    //populate 
-    //generate CRC
+    for (uint32_t i = 0; i < DATA_SIZE; i++) {
+        frame[i] = data[i];
+    }
+    frame[DATA_SIZE] = CRC(data);
 }
 
 bool Puppet::compareID(uint8_t id) {
