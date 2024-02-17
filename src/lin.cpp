@@ -18,6 +18,7 @@ uint64_t scan(uint8_t* pattern, uint8_t* data, size_t patternLength, size_t data
 }
 
 //patternMask should be a bitmask where all bits in the pattern are 1
+//returns the number of bits the data needs to be shifted by to detect the pattern
 int32_t scan(uint64_t pattern, uint64_t data, uint64_t patternMask, size_t patternLength) {
     for (size_t i = 0; i <= (64 - patternLength); i++) {
         if (pattern == ((data >> i) & patternMask)) {
@@ -79,13 +80,13 @@ bool Puppet::dataHasBeenRequested() {
         uint8_t incByte = _serial->read();
         headerDetectionBuffer = (headerDetectionBuffer << 8) | incByte;
         headerIndex = scan(0x3ffe55, headerDetectionBuffer, 0x8fffff, 23);
-        if (headerIndex != -1) {
+        if (headerIndex >= 8) {
             break;
         }
     }
 
     //if buffer is complete, check PID and handle accordingly
-    if(headerIndex != -1) {
+    if (headerIndex >= 8) {
         uint8_t id = uint8_t((headerDetectionBuffer >> headerIndex) & 0xff);
         headerDetectionBuffer = 0; //reset buffer
         if (Puppet::compareID(id))
