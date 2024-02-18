@@ -87,7 +87,7 @@ bool Puppet::dataHasBeenRequested() {
 
     //if buffer is complete, check PID and handle accordingly
     if (headerIndex >= 8) {
-        uint8_t id = uint8_t((headerDetectionBuffer >> headerIndex) & 0xff);
+        uint8_t id = uint8_t((headerDetectionBuffer >> (headerIndex - 8)) & 0xff);
         headerDetectionBuffer = 0; //reset buffer
         if (Puppet::compareID(id))
             return true;
