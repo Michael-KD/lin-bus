@@ -29,10 +29,13 @@ int32_t scan(uint64_t pattern, uint64_t data, uint64_t patternMask, size_t patte
 }
     
 
-Master::Master(HardwareSerial* serialPort, uint32_t baudRate) {
+Master::Master(HardwareSerial* serialPort, uint32_t baudRate, uint32_t dataSize) {
     _serial = serialPort;
     this->baudRate = baudRate;
+    this->dataSize = dataSize;
     _serial->begin(baudRate);
+    uint8_t incDataBuffer[dataSize * 2] = {0};
+    _incDataBuffer = incDataBuffer;
 }
 
 uint8_t* Master::requestData(uint8_t id) {
@@ -65,10 +68,11 @@ void Master::generateHeader(uint8_t id, uint8_t* frame) {
 
 // =============================================================================================== //
 
-Puppet::Puppet(HardwareSerial* serialPort, uint8_t id, uint32_t baudRate) {
+Puppet::Puppet(HardwareSerial* serialPort, uint8_t id, uint32_t baudRate, uint32_t dataSize) {
     _serial = serialPort;
     this->id = id;
     this->baudRate = baudRate;
+    this->dataSize = dataSize;
     _serial->begin(baudRate);
     headerDetectionBuffer = 0;
 }
@@ -97,16 +101,16 @@ bool Puppet::dataHasBeenRequested() {
 }
 
 void Puppet::reply(uint8_t* data) {
-    uint8_t frame[DATA_SIZE + 1] = {0};
+    uint8_t frame[dataSize + 1] = {0};
     Puppet::generateResponse(data, frame);
-    _serial->write(frame, DATA_SIZE + 1);
+    _serial->write(frame, dataSize + 1);
 }
 
 void Puppet::generateResponse(uint8_t* data, uint8_t* frame) {
-    for (uint32_t i = 0; i < DATA_SIZE; i++) {
+    for (uint32_t i = 0; i < dataSize; i++) {
         frame[i] = data[i];
     }
-    frame[DATA_SIZE] = CRC(data);
+    frame[dataSize] = CRC(data);
 }
 
 bool Puppet::compareID(uint8_t id) {

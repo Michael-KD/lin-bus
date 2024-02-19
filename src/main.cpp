@@ -13,7 +13,7 @@ const uint8_t LIN_CS = 3;
 const uint8_t CONTROLLER_ID = 0x3a;
 const uint8_t NODE_ID = 0x3b;
 
-LIN::Master master(&Serial1, BAUD_RATE);
+LIN::Master master(&Serial1, BAUD_RATE, 8);
 
 void setup() {
   Serial.begin(9600);
