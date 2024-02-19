@@ -9,8 +9,12 @@ uint8_t parity(uint8_t id) {
     return ((bit6 | (bit7 << 1)) << 6);
 }
 
-uint8_t CRC(uint8_t* data) {
-    return 0;
+uint8_t CRC(uint8_t* data, size_t dataSize) {
+    uint8_t sum = 0;
+    for (size_t i = 0; i < dataSize; i++) {
+        sum += data[i];
+    }
+    return sum;
 }
 
 uint64_t scan(uint8_t* pattern, uint8_t* data, size_t patternLength, size_t dataLength) {
@@ -29,7 +33,7 @@ int32_t scan(uint64_t pattern, uint64_t data, uint64_t patternMask, size_t patte
 }
     
 
-Master::Master(HardwareSerial* serialPort, uint32_t baudRate, uint32_t dataSize) {
+Master::Master(HardwareSerial* serialPort, uint32_t baudRate, size_t dataSize) {
     _serial = serialPort;
     this->baudRate = baudRate;
     this->dataSize = dataSize;
@@ -43,6 +47,7 @@ uint8_t* Master::requestData(uint8_t id) {
     generateHeader(id, headerFrame);
 
     //clear receiving buffer
+    clearDataBuffer();
     while (_serial->available())
         _serial->read();
 
@@ -50,6 +55,17 @@ uint8_t* Master::requestData(uint8_t id) {
     _serial->write(headerFrame, 4);
 
     //read data in
+    size_t i = 0;
+    while (i < dataSize * 2) {
+        if (_serial->available()) {
+            _incDataBuffer[i] = _serial->read();
+            i++;
+        }
+        //may want to have a clause to break early since
+        //buffer is 2x message length
+    }
+
+    //process the buffer somehow
    
    return NULL;
 }
@@ -66,9 +82,15 @@ void Master::generateHeader(uint8_t id, uint8_t* frame) {
     frame[3] = (id & 0x3f) | parity(id);
 }
 
+void Master::clearDataBuffer() {
+    for (size_t i = 0; i < dataSize * 2; i++) {
+        _incDataBuffer[i] = 0;
+    }
+}
+
 // =============================================================================================== //
 
-Puppet::Puppet(HardwareSerial* serialPort, uint8_t id, uint32_t baudRate, uint32_t dataSize) {
+Puppet::Puppet(HardwareSerial* serialPort, uint8_t id, uint32_t baudRate, size_t dataSize) {
     _serial = serialPort;
     this->id = id;
     this->baudRate = baudRate;
@@ -91,9 +113,9 @@ bool Puppet::dataHasBeenRequested() {
 
     //if buffer is complete, check PID and handle accordingly
     if (headerIndex >= 8) {
-        uint8_t id = uint8_t((headerDetectionBuffer >> (headerIndex - 8)) & 0xff);
+        uint8_t pid = uint8_t((headerDetectionBuffer >> (headerIndex - 8)) & 0xff);
         headerDetectionBuffer = 0; //reset buffer
-        if (Puppet::compareID(id))
+        if (Puppet::compareID(pid))
             return true;
     }
 
@@ -110,13 +132,13 @@ void Puppet::generateResponse(uint8_t* data, uint8_t* frame) {
     for (uint32_t i = 0; i < dataSize; i++) {
         frame[i] = data[i];
     }
-    frame[dataSize] = CRC(data);
+    frame[dataSize] = CRC(data, dataSize);
 }
 
-bool Puppet::compareID(uint8_t id) {
+bool Puppet::compareID(uint8_t pid) {
     //check if ID is the same as this puppet's ID, check parity
-    if (parity(id) == (id & 0xc0)) {
-        if (id == this->id) {
+    if (parity(pid) == (pid & 0xc0)) {
+        if (pid == id) {
             return true;
         }
     }
