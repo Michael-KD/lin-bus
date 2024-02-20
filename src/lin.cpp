@@ -17,13 +17,9 @@ uint8_t CRC(uint8_t* data, size_t dataSize) {
     return sum;
 }
 
-uint64_t scan(uint8_t* pattern, uint8_t* data, size_t patternLength, size_t dataLength) {
-    return false;
-}
-
 //patternMask should be a bitmask where all bits in the pattern are 1
 //returns the number of bits the data needs to be shifted by to detect the pattern
-int32_t scan(uint64_t pattern, uint64_t data, uint64_t patternMask, size_t patternLength) {
+size_t scan(uint64_t pattern, uint64_t data, uint64_t patternMask, size_t patternLength) {
     for (size_t i = 0; i <= (64 - patternLength); i++) {
         if (pattern == ((data >> i) & patternMask)) {
             return i;
