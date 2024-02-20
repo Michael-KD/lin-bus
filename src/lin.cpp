@@ -38,11 +38,11 @@ Master::Master(HardwareSerial* serialPort, uint32_t baudRate, size_t dataSize) {
     this->baudRate = baudRate;
     this->dataSize = dataSize;
     _serial->begin(baudRate);
-    uint8_t incDataBuffer[dataSize * 2] = {0};
+    uint8_t incDataBuffer[dataSize + 2] = {0};
     _incDataBuffer = incDataBuffer;
 }
 
-uint8_t* Master::requestData(uint8_t id) {
+void Master::requestData(uint8_t* dataBuffer, uint8_t id) {
     uint8_t headerFrame[4] = {0};
     generateHeader(id, headerFrame);
 
@@ -55,19 +55,25 @@ uint8_t* Master::requestData(uint8_t id) {
     _serial->write(headerFrame, 4);
 
     //read data in
-    size_t i = 0;
-    while (i < dataSize * 2) {
+    size_t j = 0;
+    while (j < dataSize + 2) {
         if (_serial->available()) {
-            _incDataBuffer[i] = _serial->read();
-            i++;
+            _incDataBuffer[j] = _serial->read();
+            j++;
         }
-        //may want to have a clause to break early since
-        //buffer is 2x message length
     }
 
-    //process the buffer somehow
-   
-   return NULL;
+    //buffer will be 1 bit shifted to the right of the actual data
+    //so this is to shift everything left
+    for (size_t i = 0; i < dataSize + 1; i++) {
+        _incDataBuffer[i] = (_incDataBuffer[i] << 1) | (_incDataBuffer[i + 1] >> 7);
+    }
+    
+    if (_incDataBuffer[dataSize] == CRC(_incDataBuffer, dataSize)) {
+        for (size_t i = 0; i < dataSize; i++) {
+            dataBuffer[i] = _incDataBuffer[i];
+        }
+    }
 }
 
 void Master::generateHeader(uint8_t id, uint8_t* frame) {
@@ -115,8 +121,10 @@ bool Puppet::dataHasBeenRequested() {
     if (headerIndex >= 8) {
         uint8_t pid = uint8_t((headerDetectionBuffer >> (headerIndex - 8)) & 0xff);
         headerDetectionBuffer = 0; //reset buffer
-        if (Puppet::compareID(pid))
+        if (Puppet::compareID(pid)) {
+            timeSinceHeaderReceived = 0;
             return true;
+        }
     }
 
     return false;
@@ -125,6 +133,9 @@ bool Puppet::dataHasBeenRequested() {
 void Puppet::reply(uint8_t* data) {
     uint8_t frame[dataSize + 1] = {0};
     Puppet::generateResponse(data, frame);
+    //wait for a bit (literally)
+    if (timeSinceHeaderReceived < 1000000 / baudRate)
+        delay(1000000 / baudRate - timeSinceHeaderReceived);
     _serial->write(frame, dataSize + 1);
 }
 

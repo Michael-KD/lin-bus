@@ -13,11 +13,11 @@ namespace LIN {
     class Master {
         public:
             Master(HardwareSerial* serialPort, uint32_t baudRate, size_t dataSize);
-            uint8_t* requestData(uint8_t id); //send a header
+            void requestData(uint8_t* dataBuffer, uint8_t id); //send a header
         private:
             HardwareSerial* _serial;
             uint32_t baudRate;
-            uint8_t* _incDataBuffer; //will be dataSize * 2
+            uint8_t* _incDataBuffer; //will be dataSize + 2 (1 for CRC, other to handle 1-bit offset)
             size_t dataSize;
             void generateHeader(uint8_t id, uint8_t* frame);
             void clearDataBuffer();
@@ -34,6 +34,7 @@ namespace LIN {
             uint32_t baudRate;
             uint64_t headerDetectionBuffer;
             size_t dataSize;
+            elapsedMicros timeSinceHeaderReceived;
             void generateResponse(uint8_t* data, uint8_t* frame);
             bool compareID(uint8_t pid);
     };
