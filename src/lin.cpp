@@ -2,14 +2,34 @@
 
 using namespace LIN;
 
+const bool DEBUG = false;
+
+//for debug
+void LIN::printArr(uint8_t* arr, size_t len) {
+    if (!DEBUG) return;
+    for (size_t i = 0; i < len; i++) {
+        Serial.print(arr[i], HEX);
+        Serial.print("_");
+    }
+    Serial.println();
+}
+void LIN::print(String str) {
+    if (!DEBUG) return;
+    Serial.println(str);
+}
+void LIN::print(uint64_t i) {
+    if (!DEBUG) return;
+    Serial.println(i, HEX);
+}
+
 //parity should be bits 6, 7, all other bits are 0
-uint8_t parity(uint8_t id) {
+uint8_t LIN::parity(uint8_t id) {
     int bit6 = ((id >> 0) + (id >> 1) + (id >> 2) + (id >> 4)) & 1;
     int bit7 = ~((id >> 1) + (id >> 3) + (id >> 4) + (id >> 5)) & 1;
     return ((bit6 | (bit7 << 1)) << 6);
 }
 
-uint8_t CRC(uint8_t* data, size_t dataSize) {
+uint8_t LIN::CRC(uint8_t* data, size_t dataSize) {
     uint8_t sum = 0;
     for (size_t i = 0; i < dataSize; i++) {
         sum += data[i];
@@ -19,7 +39,7 @@ uint8_t CRC(uint8_t* data, size_t dataSize) {
 
 //patternMask should be a bitmask where all bits in the pattern are 1
 //returns the number of bits the data needs to be shifted by to detect the pattern
-size_t scan(uint64_t pattern, uint64_t data, uint64_t patternMask, size_t patternLength) {
+size_t LIN::scan(uint64_t pattern, uint64_t data, uint64_t patternMask, size_t patternLength) {
     for (size_t i = 0; i <= (64 - patternLength); i++) {
         if (pattern == ((data >> i) & patternMask)) {
             return i;
@@ -30,15 +50,19 @@ size_t scan(uint64_t pattern, uint64_t data, uint64_t patternMask, size_t patter
     
 
 Master::Master(HardwareSerial* serialPort, uint32_t baudRate, size_t dataSize) {
+    if (DEBUG) Serial.begin(19200);
     _serial = serialPort;
     this->baudRate = baudRate;
     this->dataSize = dataSize;
     _serial->begin(baudRate);
     uint8_t incDataBuffer[dataSize + 2] = {0};
     _incDataBuffer = incDataBuffer;
+    enabled = false;
 }
 
-void Master::requestData(uint8_t* dataBuffer, uint8_t id) {
+bool Master::requestData(uint8_t* dataBuffer, uint8_t id) {
+    if (!enabled)
+        return false;
     uint8_t headerFrame[4] = {0};
     generateHeader(id, headerFrame);
 
@@ -48,6 +72,8 @@ void Master::requestData(uint8_t* dataBuffer, uint8_t id) {
         _serial->read();
 
     //send header
+    print("Header:");
+    printArr(headerFrame, 4);
     _serial->write(headerFrame, 4);
 
     //read data in
@@ -65,11 +91,16 @@ void Master::requestData(uint8_t* dataBuffer, uint8_t id) {
         _incDataBuffer[i] = (_incDataBuffer[i] << 1) | (_incDataBuffer[i + 1] >> 7);
     }
     
+    print("Incoming data buffer:");
+    printArr(_incDataBuffer, dataSize);
+
     if (_incDataBuffer[dataSize] == CRC(_incDataBuffer, dataSize)) {
         for (size_t i = 0; i < dataSize; i++) {
             dataBuffer[i] = _incDataBuffer[i];
         }
+        return true;
     }
+    return false;
 }
 
 void Master::generateHeader(uint8_t id, uint8_t* frame) {
@@ -90,18 +121,56 @@ void Master::clearDataBuffer() {
     }
 }
 
+void Master::enable() {
+    enabled = true;
+}
+
+void Master::disable() {
+    enabled = false;
+}
+
+/* =============================================================================================== //
 // =============================================================================================== //
+// =============================================================================================== //
+// =============================================================================================== //
+// =============================================================================================== //
+// =============================================================================================== //
+// =============================================================================================== //
+// =============================================================================================== //
+//                     _.---._    /\\                                                              //
+//                  ./'       "--`\//
+//                ./              o \          .-----.
+//               /./\  )______   \__ \        ( help! )
+//              ./  / /\ \   | \ \  \ \       /`-----'
+//                 / /  \ \  | |\ \  \7--- ooo ooo ooo ooo ooo ooo
+// =============================================================================================== //
+// =============================================================================================== //
+//                  _      _      _
+//                >(.)__ <(.)__ =(.)__
+//                 (___/  (___/  (___/
+//
+// =============================================================================================== //
+// =============================================================================================== //
+// =============================================================================================== //
+// =============================================================================================== //
+// =============================================================================================== //
+// =============================================================================================== //
+// =============================================================================================== */
 
 Puppet::Puppet(HardwareSerial* serialPort, uint8_t id, uint32_t baudRate, size_t dataSize) {
+    if (DEBUG) Serial.begin(19200);
     _serial = serialPort;
     this->id = id;
     this->baudRate = baudRate;
     this->dataSize = dataSize;
     _serial->begin(baudRate);
     headerDetectionBuffer = 0;
+    enabled = false;
 }
 
 bool Puppet::dataHasBeenRequested() {
+    if (!enabled)
+        return false;
     //checks bus buffer for input, add to internal buffer
     int32_t headerIndex = -1;
     while (_serial->available()) {
@@ -113,26 +182,36 @@ bool Puppet::dataHasBeenRequested() {
         }
     }
 
+    print("Header detection buffer:");
+    print(headerDetectionBuffer);
+
     //if buffer is complete, check PID and handle accordingly
     if (headerIndex >= 8) {
+        print("Buffer detected.");
         uint8_t pid = uint8_t((headerDetectionBuffer >> (headerIndex - 8)) & 0xff);
+        
         headerDetectionBuffer = 0; //reset buffer
         if (Puppet::compareID(pid)) {
+            print("PID match.");
             timeSinceHeaderReceived = 0;
             return true;
         }
+        print("No PID match.");
     }
 
     return false;
 }
 
 void Puppet::reply(uint8_t* data) {
+    if (!enabled)
+        return;
     uint8_t frame[dataSize + 1] = {0};
     Puppet::generateResponse(data, frame);
     //wait for a bit (literally)
     if (timeSinceHeaderReceived < 1000000 / baudRate)
         delay(1000000 / baudRate - timeSinceHeaderReceived);
     _serial->write(frame, dataSize + 1);
+    printArr(frame, dataSize + 1);
 }
 
 void Puppet::generateResponse(uint8_t* data, uint8_t* frame) {
@@ -150,4 +229,12 @@ bool Puppet::compareID(uint8_t pid) {
         }
     }
     return false;
+}
+
+void Puppet::enable() {
+    enabled = true;
+}
+
+void Puppet::disable() {
+    enabled = false;
 }
