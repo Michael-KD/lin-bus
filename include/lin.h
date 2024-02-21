@@ -14,7 +14,9 @@ namespace LIN {
 
     class Master {
         public:
-            Master(HardwareSerial* serialPort, uint32_t baudRate, size_t dataSize);
+            Master(uint32_t baudRate, size_t dataSize);
+            ~Master();
+            void startSerial(HardwareSerial* serialPort);
             bool requestData(uint8_t* dataBuffer, uint8_t id); //send a header
             void enable();
             void disable();
@@ -30,7 +32,9 @@ namespace LIN {
 
     class Puppet {
         public:
-            Puppet(HardwareSerial* serialPort, uint8_t id, uint32_t baudRate, size_t dataSize);
+            Puppet(uint8_t id, uint32_t baudRate, size_t dataSize);
+            ~Puppet();
+            void startSerial(HardwareSerial* serialPort);
             void reply(uint8_t* data); //respond to a header
             bool dataHasBeenRequested(); //reads bus; returns true if header is itself
             void enable();

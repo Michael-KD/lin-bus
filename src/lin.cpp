@@ -2,7 +2,7 @@
 
 using namespace LIN;
 
-const bool DEBUG = false;
+const bool DEBUG = true;
 
 //for debug
 void LIN::printArr(uint8_t* arr, size_t len) {
@@ -48,16 +48,27 @@ size_t LIN::scan(uint64_t pattern, uint64_t data, uint64_t patternMask, size_t p
     return -1;
 }
     
+/* =============================================================================================== //
+// =============================================================================================== //
+// =============================================================================================== //
+// =============================================================================================== //
+// =============================================================================================== */
 
-Master::Master(HardwareSerial* serialPort, uint32_t baudRate, size_t dataSize) {
-    if (DEBUG) Serial.begin(19200);
-    _serial = serialPort;
+Master::Master(uint32_t baudRate, size_t dataSize) {
     this->baudRate = baudRate;
     this->dataSize = dataSize;
-    _serial->begin(baudRate);
-    uint8_t incDataBuffer[dataSize + 2] = {0};
-    _incDataBuffer = incDataBuffer;
+    _incDataBuffer = new uint8_t[dataSize + 2];
     enabled = false;
+}
+
+Master::~Master() {
+    _serial->end();
+    delete [] _incDataBuffer;
+}
+
+void Master::startSerial(HardwareSerial* serialPort) {
+    _serial = serialPort;
+    _serial->begin(baudRate);
 }
 
 bool Master::requestData(uint8_t* dataBuffer, uint8_t id) {
@@ -65,6 +76,9 @@ bool Master::requestData(uint8_t* dataBuffer, uint8_t id) {
         return false;
     uint8_t headerFrame[4] = {0};
     generateHeader(id, headerFrame);
+    
+    print("Header:");
+    printArr(headerFrame, 4);
 
     //clear receiving buffer
     clearDataBuffer();
@@ -72,8 +86,6 @@ bool Master::requestData(uint8_t* dataBuffer, uint8_t id) {
         _serial->read();
 
     //send header
-    print("Header:");
-    printArr(headerFrame, 4);
     _serial->write(headerFrame, 4);
 
     //read data in
@@ -157,15 +169,22 @@ void Master::disable() {
 // =============================================================================================== //
 // =============================================================================================== */
 
-Puppet::Puppet(HardwareSerial* serialPort, uint8_t id, uint32_t baudRate, size_t dataSize) {
-    if (DEBUG) Serial.begin(19200);
-    _serial = serialPort;
+Puppet::Puppet(uint8_t id, uint32_t baudRate, size_t dataSize) {
     this->id = id;
     this->baudRate = baudRate;
     this->dataSize = dataSize;
-    _serial->begin(baudRate);
     headerDetectionBuffer = 0;
     enabled = false;
+}
+
+
+Puppet::~Puppet() {
+    _serial->end();
+}
+
+void Puppet::startSerial(HardwareSerial* serialPort) {
+    _serial = serialPort;
+    _serial->begin(baudRate);
 }
 
 bool Puppet::dataHasBeenRequested() {
