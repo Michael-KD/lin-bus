@@ -7,10 +7,11 @@ const bool DEBUG = true;
 //for debug
 void LIN::printArr(uint8_t* arr, size_t len) {
     if (!DEBUG) return;
-    for (size_t i = 0; i < len; i++) {
+    for (size_t i = 0; i < len - 1; i++) {
         Serial.print(arr[i], HEX);
-        Serial.print("_");
+        Serial.print(" ");
     }
+    Serial.print(arr[len - 1], HEX);
     Serial.println();
 }
 void LIN::print(String str) {
