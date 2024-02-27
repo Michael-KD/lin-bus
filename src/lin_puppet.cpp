@@ -27,21 +27,25 @@ bool Puppet::dataHasBeenRequested() {
     int32_t headerIndex = -1;
     while (_serial->available()) {
         uint8_t incByte = _serial->read();
+        // print(incByte);
         headerDetectionBuffer = (headerDetectionBuffer << 8) | incByte;
-        headerIndex = scan(0x3ffe55, headerDetectionBuffer, 0x8fffff, 23);
+        print(headerDetectionBuffer);
+        // print("=====");
+        headerIndex = scan(0x3ffe55, headerDetectionBuffer, 0x7fffff, 23);
+        // print(headerIndex);
         if (headerIndex >= 8) {
             break;
         }
     }
 
-    print("Header detection buffer:");
-    print(headerDetectionBuffer);
+    // print("Header detection buffer:");
+    // print(headerDetectionBuffer);
 
     //if buffer is complete, check PID and handle accordingly
     if (headerIndex >= 8) {
         print("Buffer detected.");
         uint8_t pid = uint8_t((headerDetectionBuffer >> (headerIndex - 8)) & 0xff);
-        
+        print(pid);
         headerDetectionBuffer = 0; //reset buffer
         if (Puppet::compareID(pid)) {
             print("PID match.");
@@ -76,7 +80,7 @@ void Puppet::generateResponse(uint8_t* data, uint8_t* frame) {
 bool Puppet::compareID(uint8_t pid) {
     //check if ID is the same as this puppet's ID, check parity
     if (parity(pid) == (pid & 0xc0)) {
-        if (pid == id) {
+        if ((pid & 0x3f) == id) {
             return true;
         }
     }

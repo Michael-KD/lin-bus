@@ -10,7 +10,7 @@ namespace LIN {
     uint8_t CRC(uint8_t* data, size_t dataSize);
     
     //scan data for a given pattern
-    size_t scan(uint64_t pattern, uint64_t data, uint64_t patternMask, size_t patternLength);
+    int64_t scan(uint64_t pattern, uint64_t data, uint64_t patternMask, size_t patternLength);
 
     class Master {
         public:
