@@ -38,21 +38,21 @@ bool Master::requestData(uint8_t* dataBuffer, uint8_t id) {
 
     //read data in
     size_t j = 0;
-    while (j < dataSize + 2) {
+    while (j < dataSize + 1) {
         if (_serial->available()) {
             _incDataBuffer[j] = _serial->read();
             j++;
         }
     }
 
-    //buffer will be 1 bit shifted to the right of the actual data
-    //so this is to shift everything left
-    for (size_t i = 0; i < dataSize + 1; i++) {
-        _incDataBuffer[i] = (_incDataBuffer[i] << 1) | (_incDataBuffer[i + 1] >> 7);
-    }
+    // //buffer will be 1 bit shifted to the right of the actual data
+    // //so this is to shift everything left
+    // for (size_t i = 0; i < dataSize + 1; i++) {
+    //     _incDataBuffer[i] = (_incDataBuffer[i] << 1) | (_incDataBuffer[i + 1] >> 7);
+    // }
     
     print("Incoming data buffer:");
-    printArr(_incDataBuffer, dataSize);
+    printArr(_incDataBuffer, dataSize + 1);
 
     if (_incDataBuffer[dataSize] == CRC(_incDataBuffer, dataSize)) {
         for (size_t i = 0; i < dataSize; i++) {
