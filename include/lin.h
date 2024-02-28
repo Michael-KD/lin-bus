@@ -32,7 +32,7 @@ namespace LIN {
     /// @param data data to scan
     /// @param patternMask masks out the pattern
     /// @param patternLength number of bits in the pattern
-    /// @return 
+    /// @return the offset by which data had to be shifted right to match with pattern; -1 if not found
     int64_t scan(uint64_t pattern, uint64_t data, uint64_t patternMask, size_t patternLength);
 
     class Master {
