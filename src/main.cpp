@@ -20,8 +20,8 @@ LIN::Puppet puppet(PUPPET_ID, BAUD_RATE, DATA_LENGTH);
 
 void setup() {
   Serial.begin(19200); //for talking with the console
-  // pinMode(LIN_CS, OUTPUT);
-  // digitalWrite(LIN_CS, HIGH);
+  pinMode(LIN_CS, OUTPUT);
+  digitalWrite(LIN_CS, HIGH);
   if (MASTER_MODE) {
     master.startSerial(&Serial1);
     master.enable();

@@ -30,10 +30,10 @@ uint8_t LIN::parity(uint8_t id) {
     return ((bit6 | (bit7 << 1)) << 6);
 }
 
-uint8_t LIN::CRC(uint8_t* data, size_t dataSize) {
+uint8_t LIN::CRC(uint8_t* data, size_t dataStart, size_t dataSize) {
     uint8_t sum = 0;
     for (size_t i = 0; i < dataSize; i++) {
-        sum += data[i];
+        sum += data[i + dataStart];
     }
     return sum;
 }

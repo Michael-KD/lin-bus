@@ -5,7 +5,7 @@ using namespace LIN;
 Master::Master(uint32_t baudRate, size_t dataSize) {
     this->baudRate = baudRate;
     this->dataSize = dataSize;
-    _incDataBuffer = new uint8_t[dataSize + 2];
+    _incDataBuffer = new uint8_t[dataSize + 6];
     enabled = false;
 }
 
@@ -28,17 +28,18 @@ bool Master::requestData(uint8_t* dataBuffer, uint8_t id) {
     print("Header:");
     printArr(headerFrame, 4);
 
+    //send header
+    _serial->write(headerFrame, 4);
+
     //clear receiving buffer
     clearDataBuffer();
     while (_serial->available())
         _serial->read();
-
-    //send header
-    _serial->write(headerFrame, 4);
+    clearDataBuffer();
 
     //read data in
     size_t j = 0;
-    while (j < dataSize + 1) {
+    while (j < dataSize + 5) {
         if (_serial->available()) {
             _incDataBuffer[j] = _serial->read();
             j++;
@@ -47,16 +48,16 @@ bool Master::requestData(uint8_t* dataBuffer, uint8_t id) {
 
     // //buffer will be 1 bit shifted to the right of the actual data
     // //so this is to shift everything left
-    // for (size_t i = 0; i < dataSize + 1; i++) {
+    // for (size_t i = 0; i < dataSize + 5; i++) {
     //     _incDataBuffer[i] = (_incDataBuffer[i] << 1) | (_incDataBuffer[i + 1] >> 7);
     // }
     
     print("Incoming data buffer:");
-    printArr(_incDataBuffer, dataSize + 1);
+    printArr(_incDataBuffer, dataSize + 5);
 
-    if (_incDataBuffer[dataSize] == CRC(_incDataBuffer, dataSize)) {
+    if (_incDataBuffer[dataSize + 4] == CRC(_incDataBuffer, 4, dataSize)) {
         for (size_t i = 0; i < dataSize; i++) {
-            dataBuffer[i] = _incDataBuffer[i];
+            dataBuffer[i] = _incDataBuffer[i + 4];
         }
         return true;
     }
@@ -76,7 +77,7 @@ void Master::generateHeader(uint8_t id, uint8_t* frame) {
 }
 
 void Master::clearDataBuffer() {
-    for (size_t i = 0; i < dataSize * 2; i++) {
+    for (size_t i = 0; i < dataSize + 6; i++) {
         _incDataBuffer[i] = 0;
     }
 }

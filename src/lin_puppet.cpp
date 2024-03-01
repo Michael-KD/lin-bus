@@ -74,7 +74,7 @@ void Puppet::generateResponse(uint8_t* data, uint8_t* frame) {
     for (uint32_t i = 0; i < dataSize; i++) {
         frame[i] = data[i];
     }
-    frame[dataSize] = CRC(data, dataSize);
+    frame[dataSize] = CRC(data, 0, dataSize);
 }
 
 bool Puppet::compareID(uint8_t pid) {

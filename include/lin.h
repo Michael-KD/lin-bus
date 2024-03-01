@@ -22,10 +22,11 @@ namespace LIN {
     uint8_t parity(uint8_t id);
     
     /// @brief generates a checksum for an array of data
-    /// @param data data
+    /// @param data data buffer
+    /// @param dataStart the start index of the data
     /// @param dataSize number of bytes in data
     /// @return byte-long checksum for the data
-    uint8_t CRC(uint8_t* data, size_t dataSize);
+    uint8_t CRC(uint8_t* data, size_t dataStart, size_t dataSize);
 
     /// @brief Scans a 64-bit data buffer for a bit pattern
     /// @param pattern pattern to scan for
