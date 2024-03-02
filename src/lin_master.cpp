@@ -5,7 +5,7 @@ using namespace LIN;
 Master::Master(uint32_t baudRate, size_t dataSize) {
     this->baudRate = baudRate;
     this->dataSize = dataSize;
-    _incDataBuffer = new uint8_t[dataSize + 6];
+    _incDataBuffer = new uint8_t[dataSize + HEADER_SIZE + 2];
     enabled = false;
 }
 
@@ -22,14 +22,14 @@ void Master::startSerial(HardwareSerial* serialPort) {
 bool Master::requestData(uint8_t* dataBuffer, uint8_t id) {
     if (!enabled)
         return false;
-    uint8_t headerFrame[4] = {0};
+    uint8_t headerFrame[HEADER_SIZE] = {0};
     generateHeader(id, headerFrame);
     
     print("Header:");
-    printArr(headerFrame, 4);
+    printArr(headerFrame, HEADER_SIZE);
 
     //send header
-    _serial->write(headerFrame, 4);
+    _serial->write(headerFrame, HEADER_SIZE);
 
     //clear receiving buffer
     clearDataBuffer();
@@ -39,25 +39,19 @@ bool Master::requestData(uint8_t* dataBuffer, uint8_t id) {
 
     //read data in
     size_t j = 0;
-    while (j < dataSize + 5) {
+    while (j < dataSize + HEADER_SIZE + 1) {
         if (_serial->available()) {
             _incDataBuffer[j] = _serial->read();
             j++;
         }
     }
-
-    // //buffer will be 1 bit shifted to the right of the actual data
-    // //so this is to shift everything left
-    // for (size_t i = 0; i < dataSize + 5; i++) {
-    //     _incDataBuffer[i] = (_incDataBuffer[i] << 1) | (_incDataBuffer[i + 1] >> 7);
-    // }
     
     print("Incoming data buffer:");
-    printArr(_incDataBuffer, dataSize + 5);
+    printArr(_incDataBuffer, dataSize + HEADER_SIZE + 1);
 
-    if (_incDataBuffer[dataSize + 4] == CRC(_incDataBuffer, 4, dataSize)) {
+    if (_incDataBuffer[dataSize + HEADER_SIZE] == CRC(_incDataBuffer, HEADER_SIZE, dataSize)) {
         for (size_t i = 0; i < dataSize; i++) {
-            dataBuffer[i] = _incDataBuffer[i + 4];
+            dataBuffer[i] = _incDataBuffer[i + HEADER_SIZE];
         }
         return true;
     }
@@ -77,7 +71,7 @@ void Master::generateHeader(uint8_t id, uint8_t* frame) {
 }
 
 void Master::clearDataBuffer() {
-    for (size_t i = 0; i < dataSize + 6; i++) {
+    for (size_t i = 0; i < dataSize + HEADER_SIZE + 2; i++) {
         _incDataBuffer[i] = 0;
     }
 }

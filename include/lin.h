@@ -3,6 +3,9 @@
 #include <Arduino.h>
 
 namespace LIN {
+    /// @brief number of bytes in a standard header
+    const uint8_t HEADER_SIZE = 4;
+
     /// @brief prints an array of characters in hex, for debug
     /// @param arr array
     /// @param len length
