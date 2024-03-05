@@ -13,7 +13,6 @@ Puppet::Puppet(uint8_t id, uint32_t baudRate, size_t dataSize) {
 
 Puppet::~Puppet() {
     _serial->end();
-    delete [] 
 }
 
 void Puppet::startSerial(HardwareSerial* serialPort) {
@@ -62,7 +61,7 @@ int8_t Puppet::dataHasBeenRequested() {
     return 0;
 }
 
-bool readTransmittedData(uint8_t* _dataBuffer) {
+bool Puppet::readTransmittedData(uint8_t* _dataBuffer) {
     size_t readBytes = 0;
 
     while (readBytes < dataSize) {
