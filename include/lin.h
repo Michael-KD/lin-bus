@@ -39,45 +39,6 @@ namespace LIN {
     /// @return the offset by which data had to be shifted right to match with pattern; -1 if not found
     int64_t scan(uint64_t pattern, uint64_t data, uint64_t patternMask, size_t patternLength);
 
-    class Master {
-        public:
-            /// @brief Construct a "master" process.
-            /// @param baudRate the baud rate of the LIN port
-            /// @param dataSize the number of bytes to be expected when receiving data
-            Master(uint32_t baudRate, size_t dataSize);
-
-            /// @brief Deconstructor
-            ~Master();
-            
-            /// @brief prepares the serial port to send and receive data
-            /// @param serialPort pointer to the serial port to be used for bus communication
-            void startSerial(HardwareSerial* serialPort);
-            
-            /// @brief requests data from a node on the bus
-            /// @param dataBuffer an array to hold the incoming data
-            /// @param id the "puppet" id to query
-            /// @return if the checksum is valid and data integrity is not compromised
-            bool requestData(uint8_t* dataBuffer, uint8_t id);
-            
-            /// @brief Enables the "master" process
-            void enable();
-            
-            /// @brief Disables the "master" process
-            void disable();
-        private:
-            HardwareSerial* _serial;
-            uint32_t baudRate;
-            uint8_t* _incDataBuffer; //will be dataSize + 2 (1 for CRC, other to handle 1-bit offset)
-            size_t dataSize;
-            bool enabled;
-            /// @brief Generates the LIN header frame
-            /// @param id id of puppet node to contact
-            /// @param frame pointer to the space allocated for the frame
-            void generateHeader(uint8_t id, uint8_t* frame);
-            /// @brief clears the incoming data buffer
-            void clearDataBuffer();
-    };
-
     class Puppet {
         public:
             /// @brief Constructor for the "puppet" process
@@ -98,8 +59,14 @@ namespace LIN {
             void reply(uint8_t* data); //respond to a header
             
             /// @brief checks the input buffer to see if a request has been made to this node
-            bool dataHasBeenRequested(); //reads bus; returns true if header is itself
+            /// @return 1 if a request has been made to this node, 2 if a message has been transmitted, 0 if the request is not for this node
+            int8_t dataHasBeenRequested(); //reads bus; returns true if header is itself
             
+            /// @brief reads the data transmitted from masqueradingMaster
+            /// @param dataBuffer buffer to store the incoming data
+            /// @return if the checksum is valid and data integrity is not compromised
+            bool readTransmittedData(uint8_t* _dataBuffer);
+
             /// @brief enable node
             void enable();
             
@@ -122,5 +89,51 @@ namespace LIN {
             /// @param pid PID to check against
             /// @return if the PIDs match (ID and parity bits)
             bool compareID(uint8_t pid);
+    };
+
+    class Master {
+        public:
+            /// @brief Construct a "master" process.
+            /// @param baudRate the baud rate of the LIN port
+            /// @param dataSize the number of bytes to be expected when receiving data
+            Master(uint32_t baudRate, size_t dataSize);
+
+            /// @brief Deconstructor
+            ~Master();
+            
+            /// @brief prepares the serial port to send and receive data
+            /// @param serialPort pointer to the serial port to be used for bus communication
+            void startSerial(HardwareSerial* serialPort);
+            
+            /// @brief requests data from a node on the bus
+            /// @param dataBuffer an array to hold the incoming data
+            /// @param id the "puppet" id to query
+            /// @return if the checksum is valid and data integrity is not compromised
+            bool requestData(uint8_t* dataBuffer, uint8_t id);
+            
+            /// @brief transmits data to the bus
+            /// @param data data to transmit to bus
+            /// @return if idk bruh
+            bool transmitData(uint8_t* data);
+
+            /// @brief Enables the "master" process
+            void enable();
+            
+            /// @brief Disables the "master" process
+            void disable();
+        private:
+            HardwareSerial* _serial;
+            uint32_t baudRate;
+            uint8_t* _incDataBuffer; //will be dataSize + 2 (1 for CRC, other to handle 1-bit offset)
+            size_t dataSize;
+            bool enabled;
+            /// funky guy
+            LIN::Puppet* masqueradingMaster;
+            /// @brief Generates the LIN header frame
+            /// @param id id of puppet node to contact
+            /// @param frame pointer to the space allocated for the frame
+            void generateHeader(uint8_t id, uint8_t* frame);
+            /// @brief clears the incoming data buffer
+            void clearDataBuffer();
     };
 }

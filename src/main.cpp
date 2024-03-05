@@ -46,7 +46,25 @@ void loop() {
       Serial.println("Send balled.");
     }
     delay(1000);
-  } else {
+  } else if (!MASTER_MODE) {
+    while (true) {
+      bool requested = puppet.dataHasBeenRequested();
+      if (requested == 1) {
+        Serial.println("Data requested! Sending...");
+        uint8_t data[DATA_LENGTH] = {0, 2, 4, 6, 7, 5, 3, 1};
+        puppet.reply(data);
+      } else if (requested == 2) {
+        Serial.println("Transmission recieved. Reading...");
+        uint8_t data[DATA_LENGTH] = {0};
+        puppet.read(data);
+        for (int i = 0; i < DATA_LENGTH; i++) {
+          Serial.print(data[i]);
+          Serial.print(" ");
+        }
+      }
+
+
+
     while (!puppet.dataHasBeenRequested());
     Serial.println("Data requested! Sending...");
     uint8_t data[DATA_LENGTH] = {0, 2, 4, 6, 7, 5, 3, 1};

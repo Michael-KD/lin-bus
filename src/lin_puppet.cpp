@@ -13,6 +13,7 @@ Puppet::Puppet(uint8_t id, uint32_t baudRate, size_t dataSize) {
 
 Puppet::~Puppet() {
     _serial->end();
+    delete [] 
 }
 
 void Puppet::startSerial(HardwareSerial* serialPort) {
@@ -20,7 +21,7 @@ void Puppet::startSerial(HardwareSerial* serialPort) {
     _serial->begin(baudRate);
 }
 
-bool Puppet::dataHasBeenRequested() {
+int8_t Puppet::dataHasBeenRequested() {
     if (!enabled)
         return false;
     //checks bus buffer for input, add to internal buffer
@@ -50,12 +51,28 @@ bool Puppet::dataHasBeenRequested() {
         if (Puppet::compareID(pid)) {
             print("PID match.");
             timeSinceHeaderReceived = 0;
-            return true;
+            return 1;
+        } else if (pid == 0) {
+            print("Broadcast detected.");
+            return 2;
         }
         print("No PID match.");
     }
 
-    return false;
+    return 0;
+}
+
+bool readTransmittedData(uint8_t* _dataBuffer) {
+    size_t readBytes = 0;
+
+    while (readBytes < dataSize) {
+        if (_serial->available()) {
+            _dataBuffer[readBytes] = _serial->read();
+        }
+    }
+
+    uint8_t crc = _serial->read();
+    return (crc == CRC(_dataBuffer, 0, dataSize));
 }
 
 void Puppet::reply(uint8_t* data) {

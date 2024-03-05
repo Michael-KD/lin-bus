@@ -7,6 +7,7 @@ Master::Master(uint32_t baudRate, size_t dataSize) {
     this->dataSize = dataSize;
     _incDataBuffer = new uint8_t[dataSize + HEADER_SIZE + 2];
     enabled = false;
+    masqueradingMaster = new Puppet(0, 19200, dataSize);
 }
 
 Master::~Master() {
@@ -20,7 +21,7 @@ void Master::startSerial(HardwareSerial* serialPort) {
 }
 
 bool Master::requestData(uint8_t* dataBuffer, uint8_t id) {
-    if (!enabled)
+    if (!enabled || id == 0)
         return false;
     uint8_t headerFrame[HEADER_SIZE] = {0};
     generateHeader(id, headerFrame);
@@ -56,6 +57,22 @@ bool Master::requestData(uint8_t* dataBuffer, uint8_t id) {
         return true;
     }
     return false;
+}
+
+bool Master::transmitData(uint8_t* data) {
+    if (!enabled)
+        return false;
+    uint8_t headerFrame[HEADER_SIZE] = {0};
+    generateHeader(0, headerFrame);
+    
+    print("Header:");
+    printArr(headerFrame, HEADER_SIZE);
+
+    //send header
+    _serial->write(headerFrame, HEADER_SIZE);
+
+    masqueradingMaster->reply(data);
+    return true;
 }
 
 void Master::generateHeader(uint8_t id, uint8_t* frame) {
