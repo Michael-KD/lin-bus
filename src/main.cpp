@@ -62,13 +62,6 @@ void loop() {
           Serial.print(" ");
         }
       }
-
-
-
-      while (!puppet.dataHasBeenRequested());
-      Serial.println("Data requested! Sending...");
-      uint8_t data[DATA_LENGTH] = {0, 2, 4, 6, 7, 5, 3, 1};
-      puppet.reply(data);
     }
   }
 }
