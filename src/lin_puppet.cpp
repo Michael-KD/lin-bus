@@ -66,7 +66,7 @@ bool Puppet::readTransmittedData(uint8_t* dataBuffer) {
     
     //read data in
     size_t readBytes = 0;
-    while (readBytes < dataSize + 5) {
+    while (readBytes < dataSize + 1) {
         if (_serial->available()) {
             dataBuffer[readBytes] = _serial->read();
             readBytes++;

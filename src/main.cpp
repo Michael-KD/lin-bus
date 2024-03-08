@@ -32,12 +32,8 @@ void setup() {
 }
 
 void loop() {
-
-  Serial.println("");
-  Serial.println("=================================");
-
-
   if (MASTER_MODE) {
+    Serial.println("");
     delay(5000);
     // uint8_t data[DATA_LENGTH] = {0};
     // Serial.println("Calling master.requestData()");
