@@ -62,7 +62,7 @@ void loop() {
           Serial.println("INVALID");
         }
         
-        for (size_t i = 0; i < DATA_LENGTH + 1; i++) {
+        for (size_t i = 0; i < DATA_LENGTH; i++) {
           Serial.print(data[i], HEX);
           Serial.print(" ");
         }
