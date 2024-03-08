@@ -8,6 +8,7 @@ Master::Master(uint32_t baudRate, size_t dataSize) {
     _incDataBuffer = new uint8_t[dataSize + HEADER_SIZE + 1];
     enabled = false;
     masqueradingMaster = new Puppet(0, 19200, dataSize);
+    masqueradingMaster.enable();
 }
 
 Master::~Master() {
