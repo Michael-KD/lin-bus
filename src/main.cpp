@@ -53,10 +53,10 @@ void loop() {
   } else if (!MASTER_MODE) {
     uint8_t data[DATA_LENGTH] = {0};
 
-    int8_t busCheck = dataHasBeenRequested();
+    int8_t busCheck = puppet.dataHasBeenRequested();
     if (busCheck) {
       if (busCheck == 2) {
-        bool valid = readTransmittedData(data);
+        bool valid = puppet.readTransmittedData(data);
         if (valid) {
           Serial.println("Valid: ");
         } else {
