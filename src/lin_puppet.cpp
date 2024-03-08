@@ -67,10 +67,18 @@ bool Puppet::readTransmittedData(uint8_t* _dataBuffer) {
     while (readBytes < dataSize) {
         if (_serial->available()) {
             _dataBuffer[readBytes] = _serial->read();
+            readBytes++;
+        }
+    }
+    bool crcRead = false;
+    uint8_t crc = 0;
+    while (!crcRead) {
+        if (_serial->available()) {
+            crc = _serial->read();
+            crcRead = true;
         }
     }
 
-    uint8_t crc = _serial->read();
     return (crc == CRC(_dataBuffer, 0, dataSize));
 }
 
