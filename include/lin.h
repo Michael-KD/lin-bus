@@ -3,6 +3,8 @@
 #include <Arduino.h>
 
 namespace LIN {
+    #define HEADER_SIZE 4
+
     /// @brief prints an array of characters in hex, for debug
     /// @param arr array
     /// @param len length
