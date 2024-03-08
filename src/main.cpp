@@ -13,7 +13,7 @@ const uint8_t LIN_CS = 3;
 //ids 
 const uint8_t PUPPET_ID = 0x3b; //completely arbitrary
 
-const bool MASTER_MODE = false; //change to swap between puppet/master for testing
+const bool MASTER_MODE = true; //change to swap between puppet/master for testing
 
 LIN::Master master(BAUD_RATE, DATA_LENGTH);
 LIN::Puppet puppet(PUPPET_ID, BAUD_RATE, DATA_LENGTH);
@@ -33,12 +33,12 @@ void setup() {
 
 void loop() {
 
-  delay(5000);
   Serial.println("");
   Serial.println("=================================");
 
 
   if (MASTER_MODE) {
+    delay(5000);
     // uint8_t data[DATA_LENGTH] = {0};
     // Serial.println("Calling master.requestData()");
     // bool success = master.requestData(data, PUPPET_ID);
@@ -53,7 +53,6 @@ void loop() {
     if (transmitted) {
       Serial.println("data transmitted");
     }
-    delay(1000);
   } else if (!MASTER_MODE) {
     uint8_t data[DATA_LENGTH] = {0};
 
