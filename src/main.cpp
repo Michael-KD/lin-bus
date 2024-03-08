@@ -18,7 +18,7 @@ const bool MASTER_MODE = true; //change to swap between puppet/master for testin
 LIN::Master master(BAUD_RATE, DATA_LENGTH);
 LIN::Puppet puppet(PUPPET_ID, BAUD_RATE, DATA_LENGTH);
 
-void setup() {
+void setup() { 
   Serial.begin(19200); //for talking with the console
   pinMode(LIN_CS, OUTPUT);
   digitalWrite(LIN_CS, HIGH);
@@ -32,11 +32,9 @@ void setup() {
 }
 
 void loop() {
-
-  // Serial.println("HELLO PEOPLE");
-  delay(5000);
-
   if (MASTER_MODE) {
+    Serial.println("");
+    delay(5000);
     uint8_t data[DATA_LENGTH] = {0};
     Serial.println("Calling master.requestData()");
     bool success = master.requestData(data, PUPPET_ID);
@@ -45,22 +43,35 @@ void loop() {
     } else {
       Serial.println("Send balled.");
     }
-    delay(1000);
+
+    delay(5000);
+    uint8_t transData[DATA_LENGTH] = {9, 7, 5, 3, 8, 6, 4, 2};
+    bool transmitted = master.transmitData(transData);
+    if (transmitted) {
+      Serial.println("data transmitted");
+    }
   } else if (!MASTER_MODE) {
-    while (true) {
-      uint8_t requested = puppet.dataHasBeenRequested();
-      if (requested == 1) {
+    uint8_t data[DATA_LENGTH] = {0};
+
+    int8_t busCheck = puppet.dataHasBeenRequested();
+    if (busCheck) {
+      if (busCheck == 1) {
         Serial.println("Data requested! Sending...");
         uint8_t data[DATA_LENGTH] = {0, 2, 4, 6, 7, 5, 3, 1};
         puppet.reply(data);
-      } else if (requested == 2) {
-        Serial.println("Transmission recieved. Reading...");
-        uint8_t data[DATA_LENGTH] = {0};
-        puppet.readTransmittedData(data);
+      } else if (busCheck == 2) {
+        bool valid = puppet.readTransmittedData(data);
+        if (valid) {
+          Serial.println("Valid: ");
+        } else {
+          Serial.println("INVALID");
+        }
+        
         for (size_t i = 0; i < DATA_LENGTH; i++) {
-          Serial.print(data[i]);
+          Serial.print(data[i], HEX);
           Serial.print(" ");
         }
+        Serial.println("");
       }
     }
   }
