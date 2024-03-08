@@ -10,7 +10,7 @@ const uint8_t LIN_TXD = 1;
 const uint8_t LIN_MCP_RESET = 2;
 const uint8_t LIN_CS = 3;
 
-//ids
+//ids 
 const uint8_t PUPPET_ID = 0x3b; //completely arbitrary
 
 const bool MASTER_MODE = true; //change to swap between puppet/master for testing
