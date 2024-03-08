@@ -45,8 +45,8 @@ void loop() {
     }
 
     delay(5000);
-    uint8_t data[DATA_LENGTH] = {9, 7, 5, 3, 8, 6, 4, 2};
-    bool transmitted = master.transmitData(data);
+    uint8_t transData[DATA_LENGTH] = {9, 7, 5, 3, 8, 6, 4, 2};
+    bool transmitted = master.transmitData(transData);
     if (transmitted) {
       Serial.println("data transmitted");
     }
