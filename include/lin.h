@@ -79,7 +79,6 @@ namespace LIN {
             size_t dataSize;
             bool enabled;
             uint8_t* _incDataBuffer; //will be dataSize + HEADER_SIZE + crc byte
-            elapsedMicros timeSinceHeaderReceived;
             /// @brief Generates the response frame 
             /// @param data data to be used in data frame
             /// @param frame space allocated for the outgoing response

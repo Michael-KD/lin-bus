@@ -51,7 +51,6 @@ int8_t Puppet::dataHasBeenRequested() {
         headerDetectionBuffer = 0; //reset buffer
         if (Puppet::compareID(pid)) {
             print("PID match.");
-            timeSinceHeaderReceived = 0;
             return 1;
         } else if (pid == 0x80) {
             print("Broadcast detected.");
@@ -95,9 +94,6 @@ void Puppet::reply(uint8_t* data) {
         return;
     uint8_t frame[dataSize + 1] = {0};
     Puppet::generateResponse(data, frame);
-    //wait for a bit (literally)
-    if (timeSinceHeaderReceived < 1000000 / baudRate)
-        delay(1000000 / baudRate - timeSinceHeaderReceived);
     _serial->write(frame, dataSize + 1);
     printArr(frame, dataSize + 1);
 }

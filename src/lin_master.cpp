@@ -14,12 +14,12 @@ Master::Master(uint32_t baudRate, size_t dataSize) {
 Master::~Master() {
     _serial->end();
     delete masqueradingMaster;
-    delete [] _incDataBuffer;
+    delete[] _incDataBuffer;
 }
 
 void Master::startSerial(HardwareSerial* serialPort) {
     _serial = serialPort;
-    _serial->begin(baudRate);
+    masqueradingMaster->startSerial(serialPort);
 }
 
 bool Master::requestData(uint8_t* dataBuffer, uint8_t id) {
