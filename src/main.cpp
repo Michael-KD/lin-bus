@@ -55,7 +55,11 @@ void loop() {
 
     int8_t busCheck = puppet.dataHasBeenRequested();
     if (busCheck) {
-      if (busCheck == 2) {
+      if (busCheck == 1) {
+        Serial.println("Data requested! Sending...");
+        uint8_t data[DATA_LENGTH] = {0, 2, 4, 6, 7, 5, 3, 1};
+        puppet.reply(data);
+      } else if (busCheck == 2) {
         bool valid = puppet.readTransmittedData(data);
         if (valid) {
           Serial.println("Valid: ");
@@ -70,22 +74,5 @@ void loop() {
         Serial.println("");
       }
     }
-
-    // while (true) {
-    //   uint8_t requested = puppet.dataHasBeenRequested();
-    //   if (requested == 1) {
-    //     Serial.println("Data requested! Sending...");
-    //     uint8_t data[DATA_LENGTH] = {0, 2, 4, 6, 7, 5, 3, 1};
-    //     puppet.reply(data);git pu
-    //   } else if (requested == 2) {
-    //     Serial.println("Transmission recieved. Reading...");
-    //     uint8_t data[DATA_LENGTH] = {0};
-    //     puppet.readTransmittedData(data);
-    //     for (size_t i = 0; i < DATA_LENGTH; i++) {
-    //       Serial.print(data[i]);
-    //       Serial.print(" ");
-    //     }
-    //   }
-    // }
   }
 }
