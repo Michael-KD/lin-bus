@@ -76,8 +76,10 @@ bool Puppet::readTransmittedData(uint8_t* dataBuffer) {
         for (size_t i = 0; i < dataSize; i++) {
             dataBuffer[i] = _incDataBuffer[i + 4];
         }
+        clearDataBuffer();
         return true;
     }
+    clearDataBuffer();
     return false;
 }
 
