@@ -18,7 +18,7 @@ const bool MASTER_MODE = true; //change to swap between puppet/master for testin
 LIN::Master master(BAUD_RATE, DATA_LENGTH);
 LIN::Puppet puppet(PUPPET_ID, BAUD_RATE, DATA_LENGTH);
 
-void setup() {
+void setup() { 
   Serial.begin(19200); //for talking with the console
   pinMode(LIN_CS, OUTPUT);
   digitalWrite(LIN_CS, HIGH);
