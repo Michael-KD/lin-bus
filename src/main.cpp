@@ -47,8 +47,10 @@ void loop() {
     // }
 
     uint8_t data[DATA_LENGTH] = {0, 2, 4, 6, 7, 5, 3, 1};
-    master.transmitData(data);
-
+    bool transmitted = master.transmitData(data);
+    if (transmitted) {
+      Serial.println("data transmitted");
+    }
     delay(1000);
   } else if (!MASTER_MODE) {
     uint8_t data[DATA_LENGTH] = {0};
@@ -64,7 +66,7 @@ void loop() {
         }
         
         for (size_t i = 0; i < DATA_LENGTH; i++) {
-          Serial.print(data[i]);
+          Serial.print(data[i], HEX);
           Serial.print(" ");
         }
       }

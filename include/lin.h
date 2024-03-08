@@ -78,6 +78,7 @@ namespace LIN {
             uint64_t headerDetectionBuffer;
             size_t dataSize;
             bool enabled;
+            uint8_t* _incDataBuffer; //will be dataSize + HEADER_SIZE + crc byte
             elapsedMicros timeSinceHeaderReceived;
             /// @brief Generates the response frame 
             /// @param data data to be used in data frame
@@ -88,6 +89,8 @@ namespace LIN {
             /// @param pid PID to check against
             /// @return if the PIDs match (ID and parity bits)
             bool compareID(uint8_t pid);
+            /// @brief clears the incoming data buffer
+            void clearDataBuffer();
     };
 
     class Master {
@@ -123,7 +126,7 @@ namespace LIN {
         private:
             HardwareSerial* _serial;
             uint32_t baudRate;
-            uint8_t* _incDataBuffer; //will be dataSize + 2 (1 for CRC, other to handle 1-bit offset)
+            uint8_t* _incDataBuffer; //will be dataSize + HEADER_SIZE + crc byte
             size_t dataSize;
             bool enabled;
             /// funky guy

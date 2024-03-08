@@ -5,7 +5,7 @@ using namespace LIN;
 Master::Master(uint32_t baudRate, size_t dataSize) {
     this->baudRate = baudRate;
     this->dataSize = dataSize;
-    _incDataBuffer = new uint8_t[dataSize + 6];
+    _incDataBuffer = new uint8_t[dataSize + HEADER_SIZE + 1];
     enabled = false;
     masqueradingMaster = new Puppet(0, 19200, dataSize);
 }
@@ -33,7 +33,6 @@ bool Master::requestData(uint8_t* dataBuffer, uint8_t id) {
     _serial->write(headerFrame, 4);
 
     //clear receiving buffer
-    clearDataBuffer();
     while (_serial->available())
         _serial->read();
     clearDataBuffer();
