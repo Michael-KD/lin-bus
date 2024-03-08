@@ -51,7 +51,7 @@ int8_t Puppet::dataHasBeenRequested() {
             print("PID match.");
             timeSinceHeaderReceived = 0;
             return 1;
-        } else if (pid == 0) {
+        } else if (pid == 0x80) {
             print("Broadcast detected.");
             return 2;
         }
