@@ -37,31 +37,54 @@ void loop() {
   delay(5000);
 
   if (MASTER_MODE) {
-    uint8_t data[DATA_LENGTH] = {0};
-    Serial.println("Calling master.requestData()");
-    bool success = master.requestData(data, PUPPET_ID);
-    if (!success) {
-      Serial.println("Send failed.");
-    } else {
-      Serial.println("Send balled.");
-    }
+    // uint8_t data[DATA_LENGTH] = {0};
+    // Serial.println("Calling master.requestData()");
+    // bool success = master.requestData(data, PUPPET_ID);
+    // if (!success) {
+    //   Serial.println("Send failed.");
+    // } else {
+    //   Serial.println("Send balled.");
+    // }
+
+    uint8_t data[DATA_LENGTH] = {0, 2, 4, 6, 7, 5, 3, 1};
+    master.transmitData(data);
+
     delay(1000);
   } else if (!MASTER_MODE) {
-    while (true) {
-      uint8_t requested = puppet.dataHasBeenRequested();
-      if (requested == 1) {
-        Serial.println("Data requested! Sending...");
-        uint8_t data[DATA_LENGTH] = {0, 2, 4, 6, 7, 5, 3, 1};
-        puppet.reply(data);
-      } else if (requested == 2) {
-        Serial.println("Transmission recieved. Reading...");
-        uint8_t data[DATA_LENGTH] = {0};
-        puppet.readTransmittedData(data);
+    uint8_t data[DATA_LENGTH] = {0};
+
+    int8_t busCheck = dataHasBeenRequested();
+    if (busCheck) {
+      if (busCheck == 2) {
+        bool valid = readTransmittedData(data);
+        if (valid) {
+          Serial.println("Valid: ");
+        } else {
+          Serial.println("INVALID");
+        }
+        
         for (size_t i = 0; i < DATA_LENGTH; i++) {
           Serial.print(data[i]);
           Serial.print(" ");
         }
       }
     }
+
+    // while (true) {
+    //   uint8_t requested = puppet.dataHasBeenRequested();
+    //   if (requested == 1) {
+    //     Serial.println("Data requested! Sending...");
+    //     uint8_t data[DATA_LENGTH] = {0, 2, 4, 6, 7, 5, 3, 1};
+    //     puppet.reply(data);git pu
+    //   } else if (requested == 2) {
+    //     Serial.println("Transmission recieved. Reading...");
+    //     uint8_t data[DATA_LENGTH] = {0};
+    //     puppet.readTransmittedData(data);
+    //     for (size_t i = 0; i < DATA_LENGTH; i++) {
+    //       Serial.print(data[i]);
+    //       Serial.print(" ");
+    //     }
+    //   }
+    // }
   }
 }
