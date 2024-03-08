@@ -33,8 +33,9 @@ void setup() {
 
 void loop() {
 
-  // Serial.println("HELLO PEOPLE");
   delay(5000);
+  Serial.println("=================================");
+
 
   if (MASTER_MODE) {
     // uint8_t data[DATA_LENGTH] = {0};
