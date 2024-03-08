@@ -6,7 +6,7 @@ Puppet::Puppet(uint8_t id, uint32_t baudRate, size_t dataSize) {
     this->id = id;
     this->baudRate = baudRate;
     this->dataSize = dataSize;
-    _incDataBuffer = new uint8_t[dataSize + HEADER_SIZE + 1];
+    _incDataBuffer = new uint8_t[dataSize + 1];
     headerDetectionBuffer = 0;
     enabled = false;
 }
@@ -63,18 +63,17 @@ int8_t Puppet::dataHasBeenRequested() {
 }
 
 bool Puppet::readTransmittedData(uint8_t* dataBuffer) {
-    
     //read data in
     size_t readBytes = 0;
     while (readBytes < dataSize + 1) {
         if (_serial->available()) {
-            dataBuffer[readBytes] = _serial->read();
+            _incDataBuffer[readBytes] = _serial->read();
             readBytes++;
         }
     }
-    if (_incDataBuffer[dataSize + 4] == CRC(_incDataBuffer, 4, dataSize)) {
+    if (_incDataBuffer[dataSize] == CRC(_incDataBuffer, 0, dataSize)) {
         for (size_t i = 0; i < dataSize; i++) {
-            dataBuffer[i] = _incDataBuffer[i + 4];
+            dataBuffer[i] = _incDataBuffer[i];
         }
         clearDataBuffer();
         return true;
