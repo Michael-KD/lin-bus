@@ -35,16 +35,17 @@ void loop() {
   if (MASTER_MODE) {
     Serial.println("");
     delay(5000);
-    // uint8_t data[DATA_LENGTH] = {0};
-    // Serial.println("Calling master.requestData()");
-    // bool success = master.requestData(data, PUPPET_ID);
-    // if (!success) {
-    //   Serial.println("Send failed.");
-    // } else {
-    //   Serial.println("Send balled.");
-    // }
+    uint8_t data[DATA_LENGTH] = {0};
+    Serial.println("Calling master.requestData()");
+    bool success = master.requestData(data, PUPPET_ID);
+    if (!success) {
+      Serial.println("Send failed.");
+    } else {
+      Serial.println("Send balled.");
+    }
 
-    uint8_t data[DATA_LENGTH] = {0, 2, 4, 6, 7, 5, 3, 1};
+    delay(5000);
+    uint8_t data[DATA_LENGTH] = {9, 7, 5, 3, 8, 6, 4, 2};
     bool transmitted = master.transmitData(data);
     if (transmitted) {
       Serial.println("data transmitted");
