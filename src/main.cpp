@@ -2,7 +2,7 @@
 #include "lin.h"
 
 const uint32_t BAUD_RATE = 19200;
-const size_t DATA_LENGTH = 8;
+const size_t DATA_LENGTH = 16;
 
 //pins
 const uint8_t LIN_RXD = 0;
@@ -18,7 +18,7 @@ const bool MASTER_MODE = true; //change to swap between puppet/master for testin
 LIN::Master master(BAUD_RATE, DATA_LENGTH);
 LIN::Puppet puppet(PUPPET_ID, BAUD_RATE, DATA_LENGTH);
 
-void setup() { 
+void setup() {
   Serial.begin(19200); //for talking with the console
   pinMode(LIN_CS, OUTPUT);
   digitalWrite(LIN_CS, HIGH);
@@ -37,11 +37,15 @@ void loop() {
     delay(5000);
     uint8_t data[DATA_LENGTH] = {0};
     Serial.println("Calling master.requestData()");
+    uint64_t startMicros = micros();
     bool success = master.requestData(data, PUPPET_ID);
+    uint64_t endMicros = micros();
     if (!success) {
       Serial.println("Send failed.");
     } else {
-      Serial.println("Send balled.");
+      Serial.print("Send balled in ");
+      Serial.print(endMicros - startMicros);
+      Serial.println("us.");
     }
 
     delay(5000);

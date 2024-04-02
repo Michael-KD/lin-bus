@@ -52,7 +52,7 @@ int8_t Puppet::dataHasBeenRequested() {
         if (Puppet::compareID(pid)) {
             print("PID match.");
             return 1;
-        } else if (pid == 0x80) {
+        } else if (pid == parity(0)) {
             print("Broadcast detected.");
             return 2;
         }
