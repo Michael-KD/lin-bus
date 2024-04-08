@@ -27,37 +27,36 @@ bool Master::requestData(uint8_t* dataBuffer, uint8_t id) {
         return false;
     uint8_t headerFrame[4] = {0};
     generateHeader(id, headerFrame);
-    
-    print("Header:");
-    printArr(headerFrame, 4);
-
-    //send header
-    _serial->write(headerFrame, 4);
 
     //clear receiving buffer
     while (_serial->available())
         _serial->read();
+
+    //send header
+    _serial->write(headerFrame, 4);
+
+    elapsedMicros timeSinceTransmission = 0;
+
+    //clear receiving buffer of sent message
+    {
+        int i = 0;
+        while (_serial->available() && i < 4) {
+            _serial->read();
+            i++;
+        }
+    }
     clearDataBuffer();
 
     //read data in
     size_t j = 0;
-    while (j < dataSize + 5) {
+    while (j < dataSize + 5 && timeSinceTransmission < 5000000) {
         if (_serial->available()) {
             _incDataBuffer[j] = _serial->read();
             j++;
         }
     }
 
-    // //buffer will be 1 bit shifted to the right of the actual data
-    // //so this is to shift everything left
-    // for (size_t i = 0; i < dataSize + 5; i++) {
-    //     _incDataBuffer[i] = (_incDataBuffer[i] << 1) | (_incDataBuffer[i + 1] >> 7);
-    // }
-    
-    print("Incoming data buffer:");
-    printArr(_incDataBuffer, dataSize + 5);
-
-    if (_incDataBuffer[dataSize + 4] == CRC(_incDataBuffer, 4, dataSize)) {
+    if (timeSinceTransmission < 5000000 && _incDataBuffer[dataSize + 4] == CRC(_incDataBuffer, 4, dataSize)) {
         for (size_t i = 0; i < dataSize; i++) {
             dataBuffer[i] = _incDataBuffer[i + 4];
         }
@@ -71,9 +70,6 @@ bool Master::transmitData(uint8_t* data) {
         return false;
     uint8_t headerFrame[HEADER_SIZE] = {0};
     generateHeader(0, headerFrame);
-    
-    print("Header:");
-    printArr(headerFrame, HEADER_SIZE);
 
     //send header
     _serial->write(headerFrame, HEADER_SIZE);

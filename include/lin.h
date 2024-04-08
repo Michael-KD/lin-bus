@@ -5,19 +5,6 @@
 namespace LIN {
     #define HEADER_SIZE 4
 
-    /// @brief prints an array of characters in hex, for debug
-    /// @param arr array
-    /// @param len length
-    void printArr(uint8_t* arr, size_t len);
-    
-    /// @brief prints a string (arduino, for debug)
-    /// @param str string
-    void print(String str);
-    
-    /// @brief prints an unsigned integer
-    /// @param i a uint64_t
-    void print(uint64_t i);
-    
     /// @brief calculate the 2 parity bits (in msb and msb - 1) from an id
     /// @param id id
     /// @return the parity bits with 6 bits cleared for the actual id
