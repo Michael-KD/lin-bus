@@ -32,6 +32,7 @@ uint64_t** timeData;
 bool printedData = false;
 
 void setup() {
+  delay(5000);
   Serial.begin(19200); //for talking with the console
   pinMode(LIN_CS, OUTPUT);
   digitalWrite(LIN_CS, HIGH);
@@ -51,12 +52,18 @@ void setup() {
       timeData[i] = new uint64_t[ITERS];
     }
   }
-
+  Serial.print("Starting trial ");
+  Serial.println(trial);
+  
+  testData = new uint8_t[dataLength];
 }
 
 void loop() {
   if (MASTER_MODE) {
     if (trial < TRIALS) {
+      Serial.print("Starting iteration ");
+      Serial.println(iter);
+
       uint8_t data[dataLength] = {0};
       uint64_t startMicros = micros();
       bool success = master->requestData(data, PUPPET_ID);
@@ -66,14 +73,18 @@ void loop() {
       } else {
         timeData[trial][iter] = 5000000; //timeout
       }
-
+      iter++;
       if (iter == ITERS) {
         delete master;
         dataLength *= 2;
         master = new LIN::Master(BAUD_RATE, dataLength);
+        master->startSerial(&Serial1);
+        master->enable();
         delay(100); //give puppet time to clean
         iter = 0;
         trial++;
+        Serial.print("Starting trial ");
+        Serial.println(trial);
       }
     } else if (!printedData) {
       int bytes = 1;
@@ -82,7 +93,8 @@ void loop() {
         Serial.print(bytes + ",");
         bytes *= 2;
         for (size_t j = 0; j < ITERS; j++) {
-          Serial.print(timeData[i][j] + ",");
+          Serial.print(timeData[i][j]);
+          Serial.print(",");
         }
         Serial.println();
       }
@@ -90,18 +102,19 @@ void loop() {
     }
   } else if (!MASTER_MODE) {
     if (trial < TRIALS) {
-      puppet = new LIN::Puppet(PUPPET_ID, BAUD_RATE, dataLength);
-      testData = new uint8_t[dataLength];
-
       int8_t busCheck = puppet->dataHasBeenRequested();
       if (busCheck == 1) { //data request
         puppet->reply(testData);
+        iter++;
       }
       if (iter == ITERS) {
         delete puppet;
+        delete[] testData;
         dataLength *= 2;
+        testData = new uint8_t[dataLength];
         puppet = new LIN::Puppet(PUPPET_ID, BAUD_RATE, dataLength);
-        delay(100); //give puppet time to clean
+        puppet->startSerial(&Serial1);
+        puppet->enable();
         iter = 0;
         trial++;
       }
