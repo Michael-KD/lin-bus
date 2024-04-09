@@ -90,7 +90,8 @@ void loop() {
       int bytes = 1;
       Serial.println("Bytes");
       for (size_t i = 0; i < TRIALS; i++) {
-        Serial.print(bytes + ",");
+        Serial.print(bytes);
+        Serial.print(",");
         bytes *= 2;
         for (size_t j = 0; j < ITERS; j++) {
           Serial.print(timeData[i][j]);
