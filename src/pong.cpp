@@ -5,6 +5,22 @@
 #include "lin.h"
 #include <Arduino.h>
 
+// IMPORTED FROM LIN
+const uint32_t BAUD_RATE = 19200;
+
+//pins
+const uint8_t LIN_RXD = 0;
+const uint8_t LIN_TXD = 1;
+const uint8_t LIN_MCP_RESET = 2;
+const uint8_t LIN_CS = 3;
+
+//ids 
+const uint8_t PUPPET_ID = 0x3b; //completely arbitrary
+
+size_t dataLength = 1;
+
+LIN::Master* master;
+
 // PONG DEFINES
 #define UP_BUTTON 5
 #define DOWN_BUTTON 6
@@ -39,6 +55,14 @@ uint8_t player_y = 16;
 // LIN DEFINES
 
 void setup() {
+    pinMode(LIN_CS, OUTPUT);
+    digitalWrite(LIN_CS, HIGH);
+
+    master = new LIN::Master(BAUD_RATE, dataLength);
+    master->startSerial(&Serial1);
+    master->enable();
+
+
     display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
 
     display.display();
