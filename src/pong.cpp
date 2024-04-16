@@ -1,9 +1,3 @@
-
-
-/*
-  A simple Pong game:
- */
-
 #include <SPI.h>
 #include <Wire.h>
 #include <Adafruit_GFX.h>
@@ -29,7 +23,7 @@ const uint8_t PADDLE_HEIGHT = 24;
 #define OLED_RESET     4 // Reset pin # (or -1 if sharing Arduino reset pin)
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
-void drawCourt();
+void drawCourt() {display.drawRect(0, 0, 128, 64, WHITE);}
 
 uint8_t ball_x = 64, ball_y = 32;
 uint8_t ball_dir_x = 1, ball_dir_y = 1;
@@ -47,7 +41,6 @@ uint8_t player_y = 16;
 void setup() {
     display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
 
-    
     display.display();
     unsigned long start = millis();
 
@@ -70,15 +63,20 @@ void loop() {
     bool update = false;
     unsigned long time = millis();
 
+    // score vars
+    static uint8_t player_score = 0;
+    static uint8_t cpu_score = 0;
+
     static bool up_state = false;
     static bool down_state = false;
     
-    up_state |= (digitalRead(UP_BUTTON) == HIGH);
-    down_state |= (digitalRead(DOWN_BUTTON) == HIGH);    
-
     static bool up2_state = false;
     static bool down2_state = false;
     
+    // get button states from LIN
+    up_state |= (digitalRead(UP_BUTTON) == HIGH);
+    down_state |= (digitalRead(DOWN_BUTTON) == HIGH);    
+
     up2_state |= (digitalRead(UP2_BUTTON) == HIGH);
     down2_state |= (digitalRead(DOWN2_BUTTON) == HIGH);
 
@@ -113,6 +111,51 @@ void loop() {
             new_x += ball_dir_x + ball_dir_x;
         }
 
+        switch (new_x)
+        {
+        case 1:
+        case 126:
+            if (new_x == 1) {
+                // draw player 1 wins
+                display.clearDisplay();
+                display.setTextSize(2);
+                display.setTextColor(WHITE);
+                display.setCursor(10, 20);
+                display.println("P1 wins!");
+                display.display();
+                player_score++;
+            } else {
+                // draw CPU wins
+                display.clearDisplay();
+                display.setTextSize(2);
+                display.setTextColor(WHITE);
+                display.setCursor(10, 20);
+                display.println("P2 wins!");   
+                display.display();
+                cpu_score++;
+            }
+            delay(1000);
+            player_score++;
+            cpu_score++;
+            // reset positions
+            new_x = 64;
+            new_y = 32;
+            ball_x = 64;
+            ball_y = 32;
+            cpu_y = 16;
+            player_y = 16;
+            ball_dir_x = random(2) == 0 ? -1 : 1;
+            ball_dir_y = random(2) == 0 ? -1 : 1;
+            display.clearDisplay();
+            drawCourt();
+
+            break;
+        
+        default:
+            break;
+        }
+
+
         display.drawPixel(ball_x, ball_y, BLACK);
         display.drawPixel(new_x, new_y, WHITE);
         ball_x = new_x;
@@ -128,13 +171,6 @@ void loop() {
 
         // CPU paddle
         display.drawFastVLine(CPU_X, cpu_y, PADDLE_HEIGHT, BLACK);
-        const uint8_t half_paddle = PADDLE_HEIGHT >> 1;
-        // if(cpu_y + half_paddle > ball_y) {
-        //     cpu_y -= 1;
-        // }
-        // if(cpu_y + half_paddle < ball_y) {
-        //     cpu_y += 1;
-        // }
         if(up2_state) {
             cpu_y -= 1;
         }
@@ -154,8 +190,11 @@ void loop() {
         if(down_state) {
             player_y += 1;
         }
+
+        // reset after updating paddles
         up_state = down_state = false;
         up2_state = down2_state = false;
+
         if(player_y < 1) player_y = 1;
         if(player_y + PADDLE_HEIGHT > 63) player_y = 63 - PADDLE_HEIGHT;
         display.drawFastVLine(PLAYER_X, player_y, PADDLE_HEIGHT, WHITE);
@@ -165,9 +204,4 @@ void loop() {
 
     if(update)
         display.display();
-}
-
-
-void drawCourt() {
-    display.drawRect(0, 0, 128, 64, WHITE);
 }
