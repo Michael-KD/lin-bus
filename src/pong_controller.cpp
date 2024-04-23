@@ -25,6 +25,7 @@ LIN::Puppet* puppet;
 uint8_t buttonState;
 
 void setup() {
+    Serial.begin(9600);
     pinMode(LIN_CS, OUTPUT);
     digitalWrite(LIN_CS, HIGH);
     pinMode(UP, INPUT);
@@ -38,10 +39,10 @@ void setup() {
 
 void loop() {
     int8_t busCheck = puppet->dataHasBeenRequested();
+    int8_t up = !digitalRead(UP);
+    int8_t down = !digitalRead(DOWN);
+    buttonState = up - down;
     if (busCheck == 1) { //data request
-        int8_t up = !digitalRead(UP);
-        int8_t down = !digitalRead(DOWN);
-        buttonState = up - down;
         puppet->reply(&buttonState);
     } else if (busCheck == 2) { //data transmission
         
