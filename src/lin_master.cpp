@@ -2,9 +2,10 @@
 
 using namespace LIN;
 
-Master::Master(uint32_t baudRate, size_t dataSize) {
+Master::Master(uint32_t baudRate, size_t dataSize, uint64_t timeout) {
     this->baudRate = baudRate;
     this->dataSize = dataSize;
+    this->timeout = timeout;
     _incDataBuffer = new uint8_t[dataSize + HEADER_SIZE + 1];
     enabled = false;
     masqueradingMaster = new Puppet(0, 19200, dataSize);
@@ -49,7 +50,7 @@ bool Master::requestData(uint8_t* dataBuffer, uint8_t id) {
 
     //read data in
     size_t j = 0;
-    while (j < dataSize + 5 && timeSinceTransmission < 5000000) {
+    while (j < dataSize + 5 && timeSinceTransmission < timeout) {
         if (_serial->available()) {
             _incDataBuffer[j] = _serial->read();
             j++;

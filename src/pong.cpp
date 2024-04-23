@@ -15,7 +15,8 @@ const uint8_t LIN_MCP_RESET = 2;
 const uint8_t LIN_CS = 3;
 
 //ids 
-const uint8_t PUPPET_ID = 0x3b; //completely arbitrary
+const uint8_t PUPPET1_ID = 0x3b; //completely arbitrary
+const uint8_t PUPPET2_ID = 0x3c; //completely arbitrary
 
 size_t dataLength = 1;
 
@@ -52,13 +53,17 @@ uint8_t cpu_y = 16;
 const uint8_t PLAYER_X = 115;
 uint8_t player_y = 16;
 
-// LIN DEFINES
+static bool up_state = false;
+static bool down_state = false;
+
+static bool up2_state = false;
+static bool down2_state = false;
 
 void setup() {
     pinMode(LIN_CS, OUTPUT);
     digitalWrite(LIN_CS, HIGH);
 
-    master = new LIN::Master(BAUD_RATE, dataLength);
+    master = new LIN::Master(BAUD_RATE, dataLength, 10000);
     master->startSerial(&Serial1);
     master->enable();
 
@@ -68,10 +73,6 @@ void setup() {
     display.display();
     unsigned long start = millis();
 
-    pinMode(UP_BUTTON, INPUT);
-    pinMode(DOWN_BUTTON, INPUT);
-    pinMode(UP2_BUTTON, INPUT);
-    pinMode(DOWN2_BUTTON, INPUT);
     display.clearDisplay();
     drawCourt();
 
@@ -81,6 +82,9 @@ void setup() {
 
     ball_update = millis();
     paddle_update = ball_update;
+
+
+
 }
 
 void loop() {
@@ -91,18 +95,24 @@ void loop() {
     static uint8_t player_score = 0;
     static uint8_t cpu_score = 0;
 
-    static bool up_state = false;
-    static bool down_state = false;
-    
-    static bool up2_state = false;
-    static bool down2_state = false;
     
     // get button states from LIN
-    up_state |= (digitalRead(UP_BUTTON) == HIGH);
-    down_state |= (digitalRead(DOWN_BUTTON) == HIGH);    
+    uint8_t data[1] = {0};
+    uint8_t player_1_move = master->requestData(data, PUPPET1_ID);
+    if (player_1_move == 1) {
+        if (data[0] == 1) {
+            up_state = true;
+        } else if (data[0] == -1) {
+            down_state = true;
+        }   
+    } 
 
-    up2_state |= (digitalRead(UP2_BUTTON) == HIGH);
-    down2_state |= (digitalRead(DOWN2_BUTTON) == HIGH);
+
+    // up_state |= (digitalRead(UP_BUTTON) == HIGH);
+    // down_state |= (digitalRead(DOWN_BUTTON) == HIGH);    
+
+    // up2_state |= (digitalRead(UP2_BUTTON) == HIGH);
+    // down2_state |= (digitalRead(DOWN2_BUTTON) == HIGH);
 
     if(time > ball_update) {
         uint8_t new_x = ball_x + ball_dir_x;
@@ -135,32 +145,40 @@ void loop() {
             new_x += ball_dir_x + ball_dir_x;
         }
 
-        switch (new_x)
-        {
+        switch (new_x) {
         case 1:
         case 126:
             if (new_x == 1) {
                 // draw player 1 wins
-                display.clearDisplay();
-                display.setTextSize(2);
-                display.setTextColor(WHITE);
-                display.setCursor(10, 20);
-                display.println("P1 wins!");
-                display.display();
                 player_score++;
+                // send score to LIN
+
+                if (player_score == 5) {
+                    display.clearDisplay();
+                    display.setTextSize(2);
+                    display.setTextColor(WHITE);
+                    display.setCursor(10, 20);
+                    display.println("P1 wins!");
+                    display.display();
+                    player_score = 0;
+                }
             } else {
                 // draw CPU wins
-                display.clearDisplay();
-                display.setTextSize(2);
-                display.setTextColor(WHITE);
-                display.setCursor(10, 20);
-                display.println("P2 wins!");   
-                display.display();
                 cpu_score++;
-            }
+                // send score to LIN
+
+
+                if (cpu_score == 5) {
+                    display.clearDisplay();
+                    display.setTextSize(2);
+                    display.setTextColor(WHITE);
+                    display.setCursor(10, 20);
+                    display.println("P2 wins!");   
+                    display.display();
+                    cpu_score = 0;
+                }
+            }   
             delay(1000);
-            player_score++;
-            cpu_score++;
             // reset positions
             new_x = 64;
             new_y = 32;
@@ -172,7 +190,6 @@ void loop() {
             ball_dir_y = random(2) == 0 ? -1 : 1;
             display.clearDisplay();
             drawCourt();
-
             break;
         
         default:
