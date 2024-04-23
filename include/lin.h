@@ -84,7 +84,8 @@ namespace LIN {
             /// @brief Construct a "master" process.
             /// @param baudRate the baud rate of the LIN port
             /// @param dataSize the number of bytes to be expected when receiving data
-            Master(uint32_t baudRate, size_t dataSize);
+            /// @param timeout the timeout for the data request process
+            Master(uint32_t baudRate, size_t dataSize, uint64_t timeout = 5000000);
 
             /// @brief Deconstructor
             ~Master();
@@ -114,6 +115,7 @@ namespace LIN {
             uint32_t baudRate;
             uint8_t* _incDataBuffer; //will be dataSize + HEADER_SIZE + crc byte
             size_t dataSize;
+            uint64_t timeout;
             bool enabled;
             /// funky guy
             LIN::Puppet* masqueradingMaster;

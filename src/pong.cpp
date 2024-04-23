@@ -1,9 +1,3 @@
-
-
-/*
-  A simple Pong game:
- */
-
 #include <SPI.h>
 #include <Wire.h>
 #include <Adafruit_GFX.h>
@@ -21,7 +15,8 @@ const uint8_t LIN_MCP_RESET = 2;
 const uint8_t LIN_CS = 3;
 
 //ids 
-const uint8_t PUPPET_ID = 0x3b; //completely arbitrary
+const uint8_t PUPPET1_ID = 0x3b; //completely arbitrary
+const uint8_t PUPPET2_ID = 0x3c; //completely arbitrary
 
 size_t dataLength = 1;
 
@@ -45,7 +40,7 @@ const uint8_t PADDLE_HEIGHT = 24;
 #define OLED_RESET     4 // Reset pin # (or -1 if sharing Arduino reset pin)
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
-void drawCourt();
+void drawCourt() {display.drawRect(0, 0, 128, 64, WHITE);}
 
 uint8_t ball_x = 64, ball_y = 32;
 uint8_t ball_dir_x = 1, ball_dir_y = 1;
@@ -58,26 +53,26 @@ uint8_t cpu_y = 16;
 const uint8_t PLAYER_X = 115;
 uint8_t player_y = 16;
 
-// LIN DEFINES
+static bool up_state = false;
+static bool down_state = false;
+
+static bool up2_state = false;
+static bool down2_state = false;
 
 void setup() {
     pinMode(LIN_CS, OUTPUT);
     digitalWrite(LIN_CS, HIGH);
 
-    master = new LIN::Master(BAUD_RATE, dataLength);
+    master = new LIN::Master(BAUD_RATE, dataLength, 10000);
     master->startSerial(&Serial1);
     master->enable();
 
 
     display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
-    
+
     display.display();
     unsigned long start = millis();
 
-    pinMode(UP_BUTTON, INPUT);
-    pinMode(DOWN_BUTTON, INPUT);
-    pinMode(UP2_BUTTON, INPUT);
-    pinMode(DOWN2_BUTTON, INPUT);
     display.clearDisplay();
     drawCourt();
 
@@ -87,23 +82,37 @@ void setup() {
 
     ball_update = millis();
     paddle_update = ball_update;
+
+
+
 }
 
 void loop() {
     bool update = false;
     unsigned long time = millis();
 
-    static bool up_state = false;
-    static bool down_state = false;
-    
-    up_state |= (digitalRead(UP_BUTTON) == HIGH);
-    down_state |= (digitalRead(DOWN_BUTTON) == HIGH);    
+    // score vars
+    static uint8_t player_score = 0;
+    static uint8_t cpu_score = 0;
 
-    static bool up2_state = false;
-    static bool down2_state = false;
     
-    up2_state |= (digitalRead(UP2_BUTTON) == HIGH);
-    down2_state |= (digitalRead(DOWN2_BUTTON) == HIGH);
+    // get button states from LIN
+    uint8_t data[1] = {0};
+    uint8_t player_1_move = master->requestData(data, PUPPET1_ID);
+    if (player_1_move == 1) {
+        if (data[0] == 1) {
+            up_state = true;
+        } else if (data[0] == -1) {
+            down_state = true;
+        }   
+    } 
+
+
+    // up_state |= (digitalRead(UP_BUTTON) == HIGH);
+    // down_state |= (digitalRead(DOWN_BUTTON) == HIGH);    
+
+    // up2_state |= (digitalRead(UP2_BUTTON) == HIGH);
+    // down2_state |= (digitalRead(DOWN2_BUTTON) == HIGH);
 
     if(time > ball_update) {
         uint8_t new_x = ball_x + ball_dir_x;
@@ -136,6 +145,58 @@ void loop() {
             new_x += ball_dir_x + ball_dir_x;
         }
 
+        switch (new_x) {
+        case 1:
+        case 126:
+            if (new_x == 1) {
+                // draw player 1 wins
+                player_score++;
+                // send score to LIN
+
+                if (player_score == 5) {
+                    display.clearDisplay();
+                    display.setTextSize(2);
+                    display.setTextColor(WHITE);
+                    display.setCursor(10, 20);
+                    display.println("P1 wins!");
+                    display.display();
+                    player_score = 0;
+                }
+            } else {
+                // draw CPU wins
+                cpu_score++;
+                // send score to LIN
+
+
+                if (cpu_score == 5) {
+                    display.clearDisplay();
+                    display.setTextSize(2);
+                    display.setTextColor(WHITE);
+                    display.setCursor(10, 20);
+                    display.println("P2 wins!");   
+                    display.display();
+                    cpu_score = 0;
+                }
+            }   
+            delay(1000);
+            // reset positions
+            new_x = 64;
+            new_y = 32;
+            ball_x = 64;
+            ball_y = 32;
+            cpu_y = 16;
+            player_y = 16;
+            ball_dir_x = random(2) == 0 ? -1 : 1;
+            ball_dir_y = random(2) == 0 ? -1 : 1;
+            display.clearDisplay();
+            drawCourt();
+            break;
+        
+        default:
+            break;
+        }
+
+
         display.drawPixel(ball_x, ball_y, BLACK);
         display.drawPixel(new_x, new_y, WHITE);
         ball_x = new_x;
@@ -151,13 +212,6 @@ void loop() {
 
         // CPU paddle
         display.drawFastVLine(CPU_X, cpu_y, PADDLE_HEIGHT, BLACK);
-        const uint8_t half_paddle = PADDLE_HEIGHT >> 1;
-        // if(cpu_y + half_paddle > ball_y) {
-        //     cpu_y -= 1;
-        // }
-        // if(cpu_y + half_paddle < ball_y) {
-        //     cpu_y += 1;
-        // }
         if(up2_state) {
             cpu_y -= 1;
         }
@@ -177,8 +231,11 @@ void loop() {
         if(down_state) {
             player_y += 1;
         }
+
+        // reset after updating paddles
         up_state = down_state = false;
         up2_state = down2_state = false;
+
         if(player_y < 1) player_y = 1;
         if(player_y + PADDLE_HEIGHT > 63) player_y = 63 - PADDLE_HEIGHT;
         display.drawFastVLine(PLAYER_X, player_y, PADDLE_HEIGHT, WHITE);
@@ -188,9 +245,4 @@ void loop() {
 
     if(update)
         display.display();
-}
-
-
-void drawCourt() {
-    display.drawRect(0, 0, 128, 64, WHITE);
 }
