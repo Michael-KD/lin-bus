@@ -1,3 +1,6 @@
+#include <Wire.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
 #include <Arduino.h>
 #include "lin.h"
 
@@ -36,8 +39,8 @@ void setup() {
 void loop() {
     int8_t busCheck = puppet->dataHasBeenRequested();
     if (busCheck == 1) { //data request
-        bool up = !digitalRead(UP);
-        bool down = !digitalRead(DOWN);
+        int8_t up = !digitalRead(UP);
+        int8_t down = !digitalRead(DOWN);
         buttonState = up - down;
         puppet->reply(&buttonState);
     } else if (busCheck == 2) { //data transmission
