@@ -63,9 +63,9 @@
 //     pinMode(LIN_CS, OUTPUT);
 //     digitalWrite(LIN_CS, HIGH);
 
-//     master = new LIN::Master(BAUD_RATE, dataLength, 10000);
-//     master->startSerial(&Serial1);
-//     master->enable();
+    master = new LIN::Master(BAUD_RATE, dataLength, 500000);
+    master->startSerial(&Serial1);
+    master->enable();
 
 
 //     display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
@@ -96,16 +96,34 @@
 //     static uint8_t cpu_score = 0;
 
     
-//     // get button states from LIN
-//     uint8_t data[1] = {0};
-//     uint8_t player_1_move = master->requestData(data, PUPPET1_ID);
-//     if (player_1_move == 1) {
-//         if (data[0] == 1) {
-//             up_state = true;
-//         } else if (data[0] == -1) {
-//             down_state = true;
-//         }   
-//     } 
+    // get button states from LIN
+    uint8_t data[1] = {0};
+    uint8_t player_1_move = master->requestData(data, PUPPET1_ID);
+    if (player_1_move == 1) {
+        if (data[0] == 1) {
+            up_state = true;
+            down_state = false;
+        } else if (data[0] == 255) {
+            down_state = true;
+            up_state = false;
+        }   
+    } else {
+        Serial.println("LIN timeout");
+    }
+
+    data[1] = {0};
+    uint8_t player_2_move = master->requestData(data, PUPPET2_ID);
+    if (player_2_move == 1) {
+        if (data[0] == 1) {
+            up2_state = true;
+            down2_state = false;
+        } else if (data[0] == 255) {
+            down2_state = true;
+            up2_state = false;
+        }   
+    } else {
+        Serial.println("LIN timeout");
+    }
 
 
 //     // up_state |= (digitalRead(UP_BUTTON) == HIGH);
