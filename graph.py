@@ -9,7 +9,8 @@ data = pd.read_csv('data.csv').to_numpy()
 bytes = data[:, 0]
 reformattedData = []
 i = 0
-for byteData in data:
+
+for byteData in data[1:]:
     for time in byteData[1:]:
         reformattedData.append([bytes[i], time / 1000])
     i += 1
@@ -17,14 +18,11 @@ reformattedData = np.array(reformattedData)
 
 #linreg
 regression = linregress(reformattedData[:, 0], reformattedData[:, 1])
-print(regression)
 
 #residuals
 residuals = []
 for i in reformattedData:
     residuals.append([i[0], i[1] - (regression.intercept + regression.slope * i[0])])
-    if (residuals[-1][1] > 0.4):
-        residuals.pop()
 residuals = np.array(residuals)
 residuals[:, 1] *= 1000
 
@@ -40,7 +38,7 @@ ax[0].set_ylabel("Time (ms)")
 ax[0].text(250, 250, "y = " + "%.2f" % regression.slope + "x + " + "%.2f" % regression.intercept, color='gray')
 ax[0].grid(color='lightgray')
 
-ax[1].scatter(residuals[60:, 0], residuals[60:, 1], zorder=10, marker='o')
+ax[1].scatter(residuals[:, 0], residuals[:, 1], zorder=10, marker='o', alpha=0.1)
 ax[1].axhline(color='black', lw=1)
 ax[1].set_xlim([0, 512])
 ax[1].set_title("Residual plot of time to send and receive")
@@ -49,4 +47,4 @@ ax[1].set_ylabel("Deviation from regression (us)")
 ax[1].grid(color='lightgray')
 
 plt.savefig("graphs.png")
-plt.show()
+#plt.show()
