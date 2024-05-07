@@ -1,5 +1,5 @@
 ## UCSB Gaucho Racing Serial Communication Protocol
-#### - 2023-24 URCA Research Project
+#### 2023-24 URCA Research Project
 
 Open the .\doxygen\html\index.html file to view the documentation.
 
