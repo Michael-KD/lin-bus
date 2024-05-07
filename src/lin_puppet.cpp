@@ -29,36 +29,22 @@ int8_t Puppet::dataHasBeenRequested() {
     int32_t headerIndex = -1;
     while (_serial->available()) {
         uint8_t incByte = _serial->read();
-        // print(incByte);
         headerDetectionBuffer = (headerDetectionBuffer << 8) | incByte;
-        print(headerDetectionBuffer);
-        // print("=====");
         headerIndex = scan(0x3ffe55, headerDetectionBuffer, 0x7fffff, 23);
-        // print(headerIndex);
         if (headerIndex >= 8) {
             break;
         }
     }
-
-    // print("Header detection buffer:");
-    // print(headerDetectionBuffer);
-
     //if buffer is complete, check PID and handle accordingly
     if (headerIndex >= 8) {
-        print("Buffer detected.");
         uint8_t pid = uint8_t((headerDetectionBuffer >> (headerIndex - 8)) & 0xff);
-        print(pid);
         headerDetectionBuffer = 0; //reset buffer
         if (Puppet::compareID(pid)) {
-            print("PID match.");
             return 1;
         } else if (pid == parity(0)) {
-            print("Broadcast detected.");
             return 2;
         }
-        print("No PID match.");
     }
-
     return 0;
 }
 
@@ -94,7 +80,6 @@ void Puppet::reply(uint8_t* data) {
     uint8_t frame[dataSize + 1] = {0};
     Puppet::generateResponse(data, frame);
     _serial->write(frame, dataSize + 1);
-    printArr(frame, dataSize + 1);
 }
 
 void Puppet::generateResponse(uint8_t* data, uint8_t* frame) {
