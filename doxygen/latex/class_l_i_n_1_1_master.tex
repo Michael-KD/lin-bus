@@ -1,0 +1,237 @@
+\hypertarget{class_l_i_n_1_1_master}{}\doxysection{LIN\+::Master Class Reference}
+\label{class_l_i_n_1_1_master}\index{LIN::Master@{LIN::Master}}
+
+
+{\ttfamily \#include $<$lin.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_l_i_n_1_1_master_a038d16168add31cf323db24940915722}{Master}} (uint32\+\_\+t \mbox{\hyperlink{class_l_i_n_1_1_master_ad6762f2b9d83daa723cdb374885dee5d}{baud\+Rate}}, size\+\_\+t \mbox{\hyperlink{class_l_i_n_1_1_master_a8769b227019aa02c38e04da1a4194276}{data\+Size}}, uint64\+\_\+t \mbox{\hyperlink{class_l_i_n_1_1_master_a69115512e2bb3c9188755951213a9c45}{timeout}}=5000000)
+\begin{DoxyCompactList}\small\item\em Construct a \char`\"{}master\char`\"{} process. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_l_i_n_1_1_master_a20f70958ed75532ba672af1b780f59eb}{$\sim$\+Master}} ()
+\begin{DoxyCompactList}\small\item\em Deconstructor. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_l_i_n_1_1_master_a2028f1efbd54eb0c809992ef966a0671}{start\+Serial}} (Hardware\+Serial $\ast$serial\+Port)
+\begin{DoxyCompactList}\small\item\em prepares the serial port to send and receive data \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_l_i_n_1_1_master_a84572a2b7571fe8a74d6b83fb50f9fed}{request\+Data}} (uint8\+\_\+t $\ast$data\+Buffer, uint8\+\_\+t id)
+\begin{DoxyCompactList}\small\item\em requests data from a node on the bus \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_l_i_n_1_1_master_a9ffb923bbbaf79a3fc5c562b90843c38}{transmit\+Data}} (uint8\+\_\+t $\ast$data)
+\begin{DoxyCompactList}\small\item\em transmits data to the bus \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_l_i_n_1_1_master_ae4ec9b6ac664cdc53034f38a37a265d7}{enable}} ()
+\begin{DoxyCompactList}\small\item\em Enables the \char`\"{}master\char`\"{} process. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_l_i_n_1_1_master_a2f135b023a2deef790c138e2df21ef26}{disable}} ()
+\begin{DoxyCompactList}\small\item\em Disables the \char`\"{}master\char`\"{} process. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_l_i_n_1_1_master_ab964b1d571725dea84cc13dd1563f4c0}{generate\+Header}} (uint8\+\_\+t id, uint8\+\_\+t $\ast$frame)
+\begin{DoxyCompactList}\small\item\em Generates the \mbox{\hyperlink{namespace_l_i_n}{LIN}} header frame. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_l_i_n_1_1_master_a860d0c734f842d8dd4e72c82cf7bb4be}{clear\+Data\+Buffer}} ()
+\begin{DoxyCompactList}\small\item\em clears the incoming data buffer \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+Hardware\+Serial $\ast$ \mbox{\hyperlink{class_l_i_n_1_1_master_a2df55dc47f5fcc9306c017e2d03bc093}{\+\_\+serial}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{class_l_i_n_1_1_master_ad6762f2b9d83daa723cdb374885dee5d}{baud\+Rate}}
+\item 
+uint8\+\_\+t $\ast$ \mbox{\hyperlink{class_l_i_n_1_1_master_ac9ed45b4447966dfbd18a95f8a3eafbe}{\+\_\+inc\+Data\+Buffer}}
+\item 
+size\+\_\+t \mbox{\hyperlink{class_l_i_n_1_1_master_a8769b227019aa02c38e04da1a4194276}{data\+Size}}
+\item 
+uint64\+\_\+t \mbox{\hyperlink{class_l_i_n_1_1_master_a69115512e2bb3c9188755951213a9c45}{timeout}}
+\item 
+bool \mbox{\hyperlink{class_l_i_n_1_1_master_aeda008bd1f4120907b29ad3bba94da48}{enabled}}
+\item 
+\mbox{\hyperlink{class_l_i_n_1_1_puppet}{LIN\+::\+Puppet}} $\ast$ \mbox{\hyperlink{class_l_i_n_1_1_master_ad3c8ccf2236782a3d0143cbd1f645491}{masquerading\+Master}}
+\begin{DoxyCompactList}\small\item\em funky guy \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_l_i_n_1_1_master_a038d16168add31cf323db24940915722}\label{class_l_i_n_1_1_master_a038d16168add31cf323db24940915722}} 
+\index{LIN::Master@{LIN::Master}!Master@{Master}}
+\index{Master@{Master}!LIN::Master@{LIN::Master}}
+\doxysubsubsection{\texorpdfstring{Master()}{Master()}}
+{\footnotesize\ttfamily Master\+::\+Master (\begin{DoxyParamCaption}\item[{uint32\+\_\+t}]{baud\+Rate,  }\item[{size\+\_\+t}]{data\+Size,  }\item[{uint64\+\_\+t}]{timeout = {\ttfamily 5000000} }\end{DoxyParamCaption})}
+
+
+
+Construct a \char`\"{}master\char`\"{} process. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em baud\+Rate} & the baud rate of the \mbox{\hyperlink{namespace_l_i_n}{LIN}} port \\
+\hline
+{\em data\+Size} & the number of bytes to be expected when receiving data \\
+\hline
+{\em timeout} & the timeout for the data request process \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_l_i_n_1_1_master_a20f70958ed75532ba672af1b780f59eb}\label{class_l_i_n_1_1_master_a20f70958ed75532ba672af1b780f59eb}} 
+\index{LIN::Master@{LIN::Master}!````~Master@{$\sim$Master}}
+\index{````~Master@{$\sim$Master}!LIN::Master@{LIN::Master}}
+\doxysubsubsection{\texorpdfstring{$\sim$Master()}{~Master()}}
+{\footnotesize\ttfamily Master\+::$\sim$\+Master (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Deconstructor. 
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_l_i_n_1_1_master_a860d0c734f842d8dd4e72c82cf7bb4be}\label{class_l_i_n_1_1_master_a860d0c734f842d8dd4e72c82cf7bb4be}} 
+\index{LIN::Master@{LIN::Master}!clearDataBuffer@{clearDataBuffer}}
+\index{clearDataBuffer@{clearDataBuffer}!LIN::Master@{LIN::Master}}
+\doxysubsubsection{\texorpdfstring{clearDataBuffer()}{clearDataBuffer()}}
+{\footnotesize\ttfamily void Master\+::clear\+Data\+Buffer (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+clears the incoming data buffer 
+
+\mbox{\Hypertarget{class_l_i_n_1_1_master_a2f135b023a2deef790c138e2df21ef26}\label{class_l_i_n_1_1_master_a2f135b023a2deef790c138e2df21ef26}} 
+\index{LIN::Master@{LIN::Master}!disable@{disable}}
+\index{disable@{disable}!LIN::Master@{LIN::Master}}
+\doxysubsubsection{\texorpdfstring{disable()}{disable()}}
+{\footnotesize\ttfamily void Master\+::disable (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Disables the \char`\"{}master\char`\"{} process. 
+
+\mbox{\Hypertarget{class_l_i_n_1_1_master_ae4ec9b6ac664cdc53034f38a37a265d7}\label{class_l_i_n_1_1_master_ae4ec9b6ac664cdc53034f38a37a265d7}} 
+\index{LIN::Master@{LIN::Master}!enable@{enable}}
+\index{enable@{enable}!LIN::Master@{LIN::Master}}
+\doxysubsubsection{\texorpdfstring{enable()}{enable()}}
+{\footnotesize\ttfamily void Master\+::enable (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Enables the \char`\"{}master\char`\"{} process. 
+
+\mbox{\Hypertarget{class_l_i_n_1_1_master_ab964b1d571725dea84cc13dd1563f4c0}\label{class_l_i_n_1_1_master_ab964b1d571725dea84cc13dd1563f4c0}} 
+\index{LIN::Master@{LIN::Master}!generateHeader@{generateHeader}}
+\index{generateHeader@{generateHeader}!LIN::Master@{LIN::Master}}
+\doxysubsubsection{\texorpdfstring{generateHeader()}{generateHeader()}}
+{\footnotesize\ttfamily void Master\+::generate\+Header (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{id,  }\item[{uint8\+\_\+t $\ast$}]{frame }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Generates the \mbox{\hyperlink{namespace_l_i_n}{LIN}} header frame. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em id} & id of puppet node to contact \\
+\hline
+{\em frame} & pointer to the space allocated for the frame \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_l_i_n_1_1_master_a84572a2b7571fe8a74d6b83fb50f9fed}\label{class_l_i_n_1_1_master_a84572a2b7571fe8a74d6b83fb50f9fed}} 
+\index{LIN::Master@{LIN::Master}!requestData@{requestData}}
+\index{requestData@{requestData}!LIN::Master@{LIN::Master}}
+\doxysubsubsection{\texorpdfstring{requestData()}{requestData()}}
+{\footnotesize\ttfamily bool Master\+::request\+Data (\begin{DoxyParamCaption}\item[{uint8\+\_\+t $\ast$}]{data\+Buffer,  }\item[{uint8\+\_\+t}]{id }\end{DoxyParamCaption})}
+
+
+
+requests data from a node on the bus 
+
+
+\begin{DoxyParams}{Parameters}
+{\em data\+Buffer} & an array to hold the incoming data \\
+\hline
+{\em id} & the \char`\"{}puppet\char`\"{} id to query \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+if the checksum is valid and data integrity is not compromised 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_l_i_n_1_1_master_a2028f1efbd54eb0c809992ef966a0671}\label{class_l_i_n_1_1_master_a2028f1efbd54eb0c809992ef966a0671}} 
+\index{LIN::Master@{LIN::Master}!startSerial@{startSerial}}
+\index{startSerial@{startSerial}!LIN::Master@{LIN::Master}}
+\doxysubsubsection{\texorpdfstring{startSerial()}{startSerial()}}
+{\footnotesize\ttfamily void Master\+::start\+Serial (\begin{DoxyParamCaption}\item[{Hardware\+Serial $\ast$}]{serial\+Port }\end{DoxyParamCaption})}
+
+
+
+prepares the serial port to send and receive data 
+
+
+\begin{DoxyParams}{Parameters}
+{\em serial\+Port} & pointer to the serial port to be used for bus communication \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_l_i_n_1_1_master_a9ffb923bbbaf79a3fc5c562b90843c38}\label{class_l_i_n_1_1_master_a9ffb923bbbaf79a3fc5c562b90843c38}} 
+\index{LIN::Master@{LIN::Master}!transmitData@{transmitData}}
+\index{transmitData@{transmitData}!LIN::Master@{LIN::Master}}
+\doxysubsubsection{\texorpdfstring{transmitData()}{transmitData()}}
+{\footnotesize\ttfamily bool Master\+::transmit\+Data (\begin{DoxyParamCaption}\item[{uint8\+\_\+t $\ast$}]{data }\end{DoxyParamCaption})}
+
+
+
+transmits data to the bus 
+
+
+\begin{DoxyParams}{Parameters}
+{\em data} & data to transmit to bus \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+if idk bruh 
+\end{DoxyReturn}
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{class_l_i_n_1_1_master_ac9ed45b4447966dfbd18a95f8a3eafbe}\label{class_l_i_n_1_1_master_ac9ed45b4447966dfbd18a95f8a3eafbe}} 
+\index{LIN::Master@{LIN::Master}!\_incDataBuffer@{\_incDataBuffer}}
+\index{\_incDataBuffer@{\_incDataBuffer}!LIN::Master@{LIN::Master}}
+\doxysubsubsection{\texorpdfstring{\_incDataBuffer}{\_incDataBuffer}}
+{\footnotesize\ttfamily uint8\+\_\+t$\ast$ LIN\+::\+Master\+::\+\_\+inc\+Data\+Buffer\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{class_l_i_n_1_1_master_a2df55dc47f5fcc9306c017e2d03bc093}\label{class_l_i_n_1_1_master_a2df55dc47f5fcc9306c017e2d03bc093}} 
+\index{LIN::Master@{LIN::Master}!\_serial@{\_serial}}
+\index{\_serial@{\_serial}!LIN::Master@{LIN::Master}}
+\doxysubsubsection{\texorpdfstring{\_serial}{\_serial}}
+{\footnotesize\ttfamily Hardware\+Serial$\ast$ LIN\+::\+Master\+::\+\_\+serial\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{class_l_i_n_1_1_master_ad6762f2b9d83daa723cdb374885dee5d}\label{class_l_i_n_1_1_master_ad6762f2b9d83daa723cdb374885dee5d}} 
+\index{LIN::Master@{LIN::Master}!baudRate@{baudRate}}
+\index{baudRate@{baudRate}!LIN::Master@{LIN::Master}}
+\doxysubsubsection{\texorpdfstring{baudRate}{baudRate}}
+{\footnotesize\ttfamily uint32\+\_\+t LIN\+::\+Master\+::baud\+Rate\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{class_l_i_n_1_1_master_a8769b227019aa02c38e04da1a4194276}\label{class_l_i_n_1_1_master_a8769b227019aa02c38e04da1a4194276}} 
+\index{LIN::Master@{LIN::Master}!dataSize@{dataSize}}
+\index{dataSize@{dataSize}!LIN::Master@{LIN::Master}}
+\doxysubsubsection{\texorpdfstring{dataSize}{dataSize}}
+{\footnotesize\ttfamily size\+\_\+t LIN\+::\+Master\+::data\+Size\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{class_l_i_n_1_1_master_aeda008bd1f4120907b29ad3bba94da48}\label{class_l_i_n_1_1_master_aeda008bd1f4120907b29ad3bba94da48}} 
+\index{LIN::Master@{LIN::Master}!enabled@{enabled}}
+\index{enabled@{enabled}!LIN::Master@{LIN::Master}}
+\doxysubsubsection{\texorpdfstring{enabled}{enabled}}
+{\footnotesize\ttfamily bool LIN\+::\+Master\+::enabled\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{class_l_i_n_1_1_master_ad3c8ccf2236782a3d0143cbd1f645491}\label{class_l_i_n_1_1_master_ad3c8ccf2236782a3d0143cbd1f645491}} 
+\index{LIN::Master@{LIN::Master}!masqueradingMaster@{masqueradingMaster}}
+\index{masqueradingMaster@{masqueradingMaster}!LIN::Master@{LIN::Master}}
+\doxysubsubsection{\texorpdfstring{masqueradingMaster}{masqueradingMaster}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_l_i_n_1_1_puppet}{LIN\+::\+Puppet}}$\ast$ LIN\+::\+Master\+::masquerading\+Master\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+funky guy 
+
+\mbox{\Hypertarget{class_l_i_n_1_1_master_a69115512e2bb3c9188755951213a9c45}\label{class_l_i_n_1_1_master_a69115512e2bb3c9188755951213a9c45}} 
+\index{LIN::Master@{LIN::Master}!timeout@{timeout}}
+\index{timeout@{timeout}!LIN::Master@{LIN::Master}}
+\doxysubsubsection{\texorpdfstring{timeout}{timeout}}
+{\footnotesize\ttfamily uint64\+\_\+t LIN\+::\+Master\+::timeout\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+include/\mbox{\hyperlink{lin_8h}{lin.\+h}}\item 
+src/\mbox{\hyperlink{lin__master_8cpp}{lin\+\_\+master.\+cpp}}\end{DoxyCompactItemize}

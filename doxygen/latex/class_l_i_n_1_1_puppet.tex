@@ -1,0 +1,263 @@
+\hypertarget{class_l_i_n_1_1_puppet}{}\doxysection{LIN\+::Puppet Class Reference}
+\label{class_l_i_n_1_1_puppet}\index{LIN::Puppet@{LIN::Puppet}}
+
+
+{\ttfamily \#include $<$lin.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_l_i_n_1_1_puppet_a67d5e72ce84338f3e971bb0f67ec0015}{Puppet}} (uint8\+\_\+t \mbox{\hyperlink{class_l_i_n_1_1_puppet_ade9c08edaae09d45a0e66a7dab3014d5}{id}}, uint32\+\_\+t \mbox{\hyperlink{class_l_i_n_1_1_puppet_abfe94c01b981327a32a6b34adfe53e8c}{baud\+Rate}}, size\+\_\+t \mbox{\hyperlink{class_l_i_n_1_1_puppet_a6613b7255402a35affd1c22d5d7bf033}{data\+Size}})
+\begin{DoxyCompactList}\small\item\em Constructor for the \char`\"{}puppet\char`\"{} process. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_l_i_n_1_1_puppet_a025739d1071090a7c3f4a27c183e9a7c}{$\sim$\+Puppet}} ()
+\begin{DoxyCompactList}\small\item\em Deconstructor. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_l_i_n_1_1_puppet_ac58dd46f8f363c3f354da74597a88b4b}{start\+Serial}} (Hardware\+Serial $\ast$serial\+Port)
+\begin{DoxyCompactList}\small\item\em prepares the serial port to send and receive data \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_l_i_n_1_1_puppet_adfd10a3824df6abf8370b1b07b76da43}{reply}} (uint8\+\_\+t $\ast$data)
+\begin{DoxyCompactList}\small\item\em Send a reply to bus. \end{DoxyCompactList}\item 
+int8\+\_\+t \mbox{\hyperlink{class_l_i_n_1_1_puppet_a848bb2579e8baf276a8937a0d34243dc}{data\+Has\+Been\+Requested}} ()
+\begin{DoxyCompactList}\small\item\em checks the input buffer to see if a request has been made to this node \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_l_i_n_1_1_puppet_a52e166771f54710cbfc1c8ceaa887353}{read\+Transmitted\+Data}} (uint8\+\_\+t $\ast$\+\_\+data\+Buffer)
+\begin{DoxyCompactList}\small\item\em reads the data transmitted from masquerading\+Master \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_l_i_n_1_1_puppet_ac8a031d7ded8665136765555014ba50c}{enable}} ()
+\begin{DoxyCompactList}\small\item\em enable node \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_l_i_n_1_1_puppet_a8969ab9030cd6413902f62d9b55c3ab7}{disable}} ()
+\begin{DoxyCompactList}\small\item\em disable node \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_l_i_n_1_1_puppet_ae1b638590ee9f9f9a0ef6195806cfb1d}{generate\+Response}} (uint8\+\_\+t $\ast$data, uint8\+\_\+t $\ast$frame)
+\begin{DoxyCompactList}\small\item\em Generates the response frame. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_l_i_n_1_1_puppet_a0a2a26a8d368352e074a7b8dff3a318b}{compare\+ID}} (uint8\+\_\+t pid)
+\begin{DoxyCompactList}\small\item\em checks the PID against the puppet\textquotesingle{}s own PID \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_l_i_n_1_1_puppet_a0afa7f0e0cfea1d8a66eb593a489e3c6}{clear\+Data\+Buffer}} ()
+\begin{DoxyCompactList}\small\item\em clears the incoming data buffer \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+Hardware\+Serial $\ast$ \mbox{\hyperlink{class_l_i_n_1_1_puppet_aa6c787b4be7f8ce23932318f2ca79ed0}{\+\_\+serial}}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{class_l_i_n_1_1_puppet_ade9c08edaae09d45a0e66a7dab3014d5}{id}}
+\item 
+uint32\+\_\+t \mbox{\hyperlink{class_l_i_n_1_1_puppet_abfe94c01b981327a32a6b34adfe53e8c}{baud\+Rate}}
+\item 
+uint64\+\_\+t \mbox{\hyperlink{class_l_i_n_1_1_puppet_a5453e74d643ba54ee8523f59d074812b}{header\+Detection\+Buffer}}
+\item 
+size\+\_\+t \mbox{\hyperlink{class_l_i_n_1_1_puppet_a6613b7255402a35affd1c22d5d7bf033}{data\+Size}}
+\item 
+bool \mbox{\hyperlink{class_l_i_n_1_1_puppet_aa9e8b5032d54feb4a9b3cacec53f1195}{enabled}}
+\item 
+uint8\+\_\+t $\ast$ \mbox{\hyperlink{class_l_i_n_1_1_puppet_a233a1202d691f0928f9c49bfa552ade7}{\+\_\+inc\+Data\+Buffer}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_l_i_n_1_1_puppet_a67d5e72ce84338f3e971bb0f67ec0015}\label{class_l_i_n_1_1_puppet_a67d5e72ce84338f3e971bb0f67ec0015}} 
+\index{LIN::Puppet@{LIN::Puppet}!Puppet@{Puppet}}
+\index{Puppet@{Puppet}!LIN::Puppet@{LIN::Puppet}}
+\doxysubsubsection{\texorpdfstring{Puppet()}{Puppet()}}
+{\footnotesize\ttfamily Puppet\+::\+Puppet (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{id,  }\item[{uint32\+\_\+t}]{baud\+Rate,  }\item[{size\+\_\+t}]{data\+Size }\end{DoxyParamCaption})}
+
+
+
+Constructor for the \char`\"{}puppet\char`\"{} process. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em id} & id of the puppet \\
+\hline
+{\em baud\+Rate} & bus baud rate \\
+\hline
+{\em data\+Size} & size of frame data in bytes \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_l_i_n_1_1_puppet_a025739d1071090a7c3f4a27c183e9a7c}\label{class_l_i_n_1_1_puppet_a025739d1071090a7c3f4a27c183e9a7c}} 
+\index{LIN::Puppet@{LIN::Puppet}!````~Puppet@{$\sim$Puppet}}
+\index{````~Puppet@{$\sim$Puppet}!LIN::Puppet@{LIN::Puppet}}
+\doxysubsubsection{\texorpdfstring{$\sim$Puppet()}{~Puppet()}}
+{\footnotesize\ttfamily Puppet\+::$\sim$\+Puppet (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Deconstructor. 
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_l_i_n_1_1_puppet_a0afa7f0e0cfea1d8a66eb593a489e3c6}\label{class_l_i_n_1_1_puppet_a0afa7f0e0cfea1d8a66eb593a489e3c6}} 
+\index{LIN::Puppet@{LIN::Puppet}!clearDataBuffer@{clearDataBuffer}}
+\index{clearDataBuffer@{clearDataBuffer}!LIN::Puppet@{LIN::Puppet}}
+\doxysubsubsection{\texorpdfstring{clearDataBuffer()}{clearDataBuffer()}}
+{\footnotesize\ttfamily void Puppet\+::clear\+Data\+Buffer (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+clears the incoming data buffer 
+
+\mbox{\Hypertarget{class_l_i_n_1_1_puppet_a0a2a26a8d368352e074a7b8dff3a318b}\label{class_l_i_n_1_1_puppet_a0a2a26a8d368352e074a7b8dff3a318b}} 
+\index{LIN::Puppet@{LIN::Puppet}!compareID@{compareID}}
+\index{compareID@{compareID}!LIN::Puppet@{LIN::Puppet}}
+\doxysubsubsection{\texorpdfstring{compareID()}{compareID()}}
+{\footnotesize\ttfamily bool Puppet\+::compare\+ID (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{pid }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+checks the PID against the puppet\textquotesingle{}s own PID 
+
+
+\begin{DoxyParams}{Parameters}
+{\em pid} & PID to check against \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+if the PIDs match (ID and parity bits) 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_l_i_n_1_1_puppet_a848bb2579e8baf276a8937a0d34243dc}\label{class_l_i_n_1_1_puppet_a848bb2579e8baf276a8937a0d34243dc}} 
+\index{LIN::Puppet@{LIN::Puppet}!dataHasBeenRequested@{dataHasBeenRequested}}
+\index{dataHasBeenRequested@{dataHasBeenRequested}!LIN::Puppet@{LIN::Puppet}}
+\doxysubsubsection{\texorpdfstring{dataHasBeenRequested()}{dataHasBeenRequested()}}
+{\footnotesize\ttfamily int8\+\_\+t Puppet\+::data\+Has\+Been\+Requested (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+checks the input buffer to see if a request has been made to this node 
+
+\begin{DoxyReturn}{Returns}
+1 if a request has been made to this node, 2 if a message has been transmitted, 0 if the request is not for this node 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_l_i_n_1_1_puppet_a8969ab9030cd6413902f62d9b55c3ab7}\label{class_l_i_n_1_1_puppet_a8969ab9030cd6413902f62d9b55c3ab7}} 
+\index{LIN::Puppet@{LIN::Puppet}!disable@{disable}}
+\index{disable@{disable}!LIN::Puppet@{LIN::Puppet}}
+\doxysubsubsection{\texorpdfstring{disable()}{disable()}}
+{\footnotesize\ttfamily void Puppet\+::disable (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+disable node 
+
+\mbox{\Hypertarget{class_l_i_n_1_1_puppet_ac8a031d7ded8665136765555014ba50c}\label{class_l_i_n_1_1_puppet_ac8a031d7ded8665136765555014ba50c}} 
+\index{LIN::Puppet@{LIN::Puppet}!enable@{enable}}
+\index{enable@{enable}!LIN::Puppet@{LIN::Puppet}}
+\doxysubsubsection{\texorpdfstring{enable()}{enable()}}
+{\footnotesize\ttfamily void Puppet\+::enable (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+enable node 
+
+\mbox{\Hypertarget{class_l_i_n_1_1_puppet_ae1b638590ee9f9f9a0ef6195806cfb1d}\label{class_l_i_n_1_1_puppet_ae1b638590ee9f9f9a0ef6195806cfb1d}} 
+\index{LIN::Puppet@{LIN::Puppet}!generateResponse@{generateResponse}}
+\index{generateResponse@{generateResponse}!LIN::Puppet@{LIN::Puppet}}
+\doxysubsubsection{\texorpdfstring{generateResponse()}{generateResponse()}}
+{\footnotesize\ttfamily void Puppet\+::generate\+Response (\begin{DoxyParamCaption}\item[{uint8\+\_\+t $\ast$}]{data,  }\item[{uint8\+\_\+t $\ast$}]{frame }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Generates the response frame. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em data} & data to be used in data frame \\
+\hline
+{\em frame} & space allocated for the outgoing response \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_l_i_n_1_1_puppet_a52e166771f54710cbfc1c8ceaa887353}\label{class_l_i_n_1_1_puppet_a52e166771f54710cbfc1c8ceaa887353}} 
+\index{LIN::Puppet@{LIN::Puppet}!readTransmittedData@{readTransmittedData}}
+\index{readTransmittedData@{readTransmittedData}!LIN::Puppet@{LIN::Puppet}}
+\doxysubsubsection{\texorpdfstring{readTransmittedData()}{readTransmittedData()}}
+{\footnotesize\ttfamily bool Puppet\+::read\+Transmitted\+Data (\begin{DoxyParamCaption}\item[{uint8\+\_\+t $\ast$}]{\+\_\+data\+Buffer }\end{DoxyParamCaption})}
+
+
+
+reads the data transmitted from masquerading\+Master 
+
+
+\begin{DoxyParams}{Parameters}
+{\em data\+Buffer} & buffer to store the incoming data \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+if the checksum is valid and data integrity is not compromised 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_l_i_n_1_1_puppet_adfd10a3824df6abf8370b1b07b76da43}\label{class_l_i_n_1_1_puppet_adfd10a3824df6abf8370b1b07b76da43}} 
+\index{LIN::Puppet@{LIN::Puppet}!reply@{reply}}
+\index{reply@{reply}!LIN::Puppet@{LIN::Puppet}}
+\doxysubsubsection{\texorpdfstring{reply()}{reply()}}
+{\footnotesize\ttfamily void Puppet\+::reply (\begin{DoxyParamCaption}\item[{uint8\+\_\+t $\ast$}]{data }\end{DoxyParamCaption})}
+
+
+
+Send a reply to bus. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em data} & data to be sent to bus \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_l_i_n_1_1_puppet_ac58dd46f8f363c3f354da74597a88b4b}\label{class_l_i_n_1_1_puppet_ac58dd46f8f363c3f354da74597a88b4b}} 
+\index{LIN::Puppet@{LIN::Puppet}!startSerial@{startSerial}}
+\index{startSerial@{startSerial}!LIN::Puppet@{LIN::Puppet}}
+\doxysubsubsection{\texorpdfstring{startSerial()}{startSerial()}}
+{\footnotesize\ttfamily void Puppet\+::start\+Serial (\begin{DoxyParamCaption}\item[{Hardware\+Serial $\ast$}]{serial\+Port }\end{DoxyParamCaption})}
+
+
+
+prepares the serial port to send and receive data 
+
+
+\begin{DoxyParams}{Parameters}
+{\em serial\+Port} & address of serial port for bus communication \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{class_l_i_n_1_1_puppet_a233a1202d691f0928f9c49bfa552ade7}\label{class_l_i_n_1_1_puppet_a233a1202d691f0928f9c49bfa552ade7}} 
+\index{LIN::Puppet@{LIN::Puppet}!\_incDataBuffer@{\_incDataBuffer}}
+\index{\_incDataBuffer@{\_incDataBuffer}!LIN::Puppet@{LIN::Puppet}}
+\doxysubsubsection{\texorpdfstring{\_incDataBuffer}{\_incDataBuffer}}
+{\footnotesize\ttfamily uint8\+\_\+t$\ast$ LIN\+::\+Puppet\+::\+\_\+inc\+Data\+Buffer\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{class_l_i_n_1_1_puppet_aa6c787b4be7f8ce23932318f2ca79ed0}\label{class_l_i_n_1_1_puppet_aa6c787b4be7f8ce23932318f2ca79ed0}} 
+\index{LIN::Puppet@{LIN::Puppet}!\_serial@{\_serial}}
+\index{\_serial@{\_serial}!LIN::Puppet@{LIN::Puppet}}
+\doxysubsubsection{\texorpdfstring{\_serial}{\_serial}}
+{\footnotesize\ttfamily Hardware\+Serial$\ast$ LIN\+::\+Puppet\+::\+\_\+serial\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{class_l_i_n_1_1_puppet_abfe94c01b981327a32a6b34adfe53e8c}\label{class_l_i_n_1_1_puppet_abfe94c01b981327a32a6b34adfe53e8c}} 
+\index{LIN::Puppet@{LIN::Puppet}!baudRate@{baudRate}}
+\index{baudRate@{baudRate}!LIN::Puppet@{LIN::Puppet}}
+\doxysubsubsection{\texorpdfstring{baudRate}{baudRate}}
+{\footnotesize\ttfamily uint32\+\_\+t LIN\+::\+Puppet\+::baud\+Rate\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{class_l_i_n_1_1_puppet_a6613b7255402a35affd1c22d5d7bf033}\label{class_l_i_n_1_1_puppet_a6613b7255402a35affd1c22d5d7bf033}} 
+\index{LIN::Puppet@{LIN::Puppet}!dataSize@{dataSize}}
+\index{dataSize@{dataSize}!LIN::Puppet@{LIN::Puppet}}
+\doxysubsubsection{\texorpdfstring{dataSize}{dataSize}}
+{\footnotesize\ttfamily size\+\_\+t LIN\+::\+Puppet\+::data\+Size\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{class_l_i_n_1_1_puppet_aa9e8b5032d54feb4a9b3cacec53f1195}\label{class_l_i_n_1_1_puppet_aa9e8b5032d54feb4a9b3cacec53f1195}} 
+\index{LIN::Puppet@{LIN::Puppet}!enabled@{enabled}}
+\index{enabled@{enabled}!LIN::Puppet@{LIN::Puppet}}
+\doxysubsubsection{\texorpdfstring{enabled}{enabled}}
+{\footnotesize\ttfamily bool LIN\+::\+Puppet\+::enabled\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{class_l_i_n_1_1_puppet_a5453e74d643ba54ee8523f59d074812b}\label{class_l_i_n_1_1_puppet_a5453e74d643ba54ee8523f59d074812b}} 
+\index{LIN::Puppet@{LIN::Puppet}!headerDetectionBuffer@{headerDetectionBuffer}}
+\index{headerDetectionBuffer@{headerDetectionBuffer}!LIN::Puppet@{LIN::Puppet}}
+\doxysubsubsection{\texorpdfstring{headerDetectionBuffer}{headerDetectionBuffer}}
+{\footnotesize\ttfamily uint64\+\_\+t LIN\+::\+Puppet\+::header\+Detection\+Buffer\hspace{0.3cm}{\ttfamily [private]}}
+
+\mbox{\Hypertarget{class_l_i_n_1_1_puppet_ade9c08edaae09d45a0e66a7dab3014d5}\label{class_l_i_n_1_1_puppet_ade9c08edaae09d45a0e66a7dab3014d5}} 
+\index{LIN::Puppet@{LIN::Puppet}!id@{id}}
+\index{id@{id}!LIN::Puppet@{LIN::Puppet}}
+\doxysubsubsection{\texorpdfstring{id}{id}}
+{\footnotesize\ttfamily uint8\+\_\+t LIN\+::\+Puppet\+::id\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+include/\mbox{\hyperlink{lin_8h}{lin.\+h}}\item 
+src/\mbox{\hyperlink{lin__puppet_8cpp}{lin\+\_\+puppet.\+cpp}}\end{DoxyCompactItemize}

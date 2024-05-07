@@ -1,0 +1,77 @@
+\hypertarget{lin_8h_source}{}\doxysection{lin.\+h}
+\label{lin_8h_source}\index{include/lin.h@{include/lin.h}}
+\mbox{\hyperlink{lin_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <Arduino.h>}}
+\DoxyCodeLine{00004\ }
+\DoxyCodeLine{00005\ \textcolor{keyword}{namespace\ }\mbox{\hyperlink{namespace_l_i_n}{LIN}}\ \{}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\ \ \ \ \#define\ HEADER\_SIZE\ 4}}
+\DoxyCodeLine{00007\ }
+\DoxyCodeLine{00011\ \ \ \ \ uint8\_t\ \mbox{\hyperlink{namespace_l_i_n_a7732f4fb927d639f5fbaa6efa71e7e17}{parity}}(uint8\_t\ \textcolor{keywordtype}{id});}
+\DoxyCodeLine{00012\ \ \ \ \ }
+\DoxyCodeLine{00018\ \ \ \ \ uint8\_t\ \mbox{\hyperlink{namespace_l_i_n_a2e688b35c5028f2c1bc4ada9d0bed503}{CRC}}(uint8\_t*\ data,\ \textcolor{keywordtype}{size\_t}\ dataStart,\ \textcolor{keywordtype}{size\_t}\ dataSize);}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00026\ \ \ \ \ int64\_t\ \mbox{\hyperlink{namespace_l_i_n_ad1560804e5bf973868a02aa127a2f1bd}{scan}}(uint64\_t\ pattern,\ uint64\_t\ data,\ uint64\_t\ patternMask,\ \textcolor{keywordtype}{size\_t}\ patternLength);}
+\DoxyCodeLine{00027\ }
+\DoxyCodeLine{00028\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_l_i_n_1_1_puppet}{Puppet}}\ \{}
+\DoxyCodeLine{00029\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_l_i_n_1_1_puppet}{Puppet}}(uint8\_t\ \textcolor{keywordtype}{id},\ uint32\_t\ \mbox{\hyperlink{class_l_i_n_1_1_puppet_abfe94c01b981327a32a6b34adfe53e8c}{baudRate}},\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{class_l_i_n_1_1_puppet_a6613b7255402a35affd1c22d5d7bf033}{dataSize}});}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_l_i_n_1_1_puppet_a025739d1071090a7c3f4a27c183e9a7c}{\string~Puppet}}();}
+\DoxyCodeLine{00038\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00041\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_l_i_n_1_1_puppet_ac58dd46f8f363c3f354da74597a88b4b}{startSerial}}(HardwareSerial*\ serialPort);}
+\DoxyCodeLine{00042\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00045\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_l_i_n_1_1_puppet_adfd10a3824df6abf8370b1b07b76da43}{reply}}(uint8\_t*\ data);\ \textcolor{comment}{//respond\ to\ a\ header}}
+\DoxyCodeLine{00046\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00049\ \ \ \ \ \ \ \ \ \ \ \ \ int8\_t\ \mbox{\hyperlink{class_l_i_n_1_1_puppet_a848bb2579e8baf276a8937a0d34243dc}{dataHasBeenRequested}}();\ \textcolor{comment}{//reads\ bus;\ returns\ true\ if\ header\ is\ itself}}
+\DoxyCodeLine{00050\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00054\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_l_i_n_1_1_puppet_a52e166771f54710cbfc1c8ceaa887353}{readTransmittedData}}(uint8\_t*\ \_dataBuffer);}
+\DoxyCodeLine{00055\ }
+\DoxyCodeLine{00057\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_l_i_n_1_1_puppet_ac8a031d7ded8665136765555014ba50c}{enable}}();}
+\DoxyCodeLine{00058\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00060\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_l_i_n_1_1_puppet_a8969ab9030cd6413902f62d9b55c3ab7}{disable}}();}
+\DoxyCodeLine{00061\ \ \ \ \ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00062\ \ \ \ \ \ \ \ \ \ \ \ \ HardwareSerial*\ \mbox{\hyperlink{class_l_i_n_1_1_puppet_aa6c787b4be7f8ce23932318f2ca79ed0}{\_serial}};}
+\DoxyCodeLine{00063\ \ \ \ \ \ \ \ \ \ \ \ \ uint8\_t\ \mbox{\hyperlink{class_l_i_n_1_1_puppet_ade9c08edaae09d45a0e66a7dab3014d5}{id}};}
+\DoxyCodeLine{00064\ \ \ \ \ \ \ \ \ \ \ \ \ uint32\_t\ \mbox{\hyperlink{class_l_i_n_1_1_puppet_abfe94c01b981327a32a6b34adfe53e8c}{baudRate}};}
+\DoxyCodeLine{00065\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{class_l_i_n_1_1_puppet_a5453e74d643ba54ee8523f59d074812b}{headerDetectionBuffer}};}
+\DoxyCodeLine{00066\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{class_l_i_n_1_1_puppet_a6613b7255402a35affd1c22d5d7bf033}{dataSize}};}
+\DoxyCodeLine{00067\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_l_i_n_1_1_puppet_aa9e8b5032d54feb4a9b3cacec53f1195}{enabled}};}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ \ \ \ \ uint8\_t*\ \mbox{\hyperlink{class_l_i_n_1_1_puppet_a233a1202d691f0928f9c49bfa552ade7}{\_incDataBuffer}};\ \textcolor{comment}{//will\ be\ dataSize\ +\ HEADER\_SIZE\ +\ crc\ byte}}
+\DoxyCodeLine{00072\ \textcolor{comment}{}\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_l_i_n_1_1_puppet_ae1b638590ee9f9f9a0ef6195806cfb1d}{generateResponse}}(uint8\_t*\ data,\ uint8\_t*\ frame);}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_l_i_n_1_1_puppet_a0a2a26a8d368352e074a7b8dff3a318b}{compareID}}(uint8\_t\ pid);}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_l_i_n_1_1_puppet_a0afa7f0e0cfea1d8a66eb593a489e3c6}{clearDataBuffer}}();}
+\DoxyCodeLine{00080\ \ \ \ \ \};}
+\DoxyCodeLine{00081\ }
+\DoxyCodeLine{00082\ \ \ \ \ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_l_i_n_1_1_master}{Master}}\ \{}
+\DoxyCodeLine{00083\ \ \ \ \ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_l_i_n_1_1_master}{Master}}(uint32\_t\ \mbox{\hyperlink{class_l_i_n_1_1_master_ad6762f2b9d83daa723cdb374885dee5d}{baudRate}},\ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{class_l_i_n_1_1_master_a8769b227019aa02c38e04da1a4194276}{dataSize}},\ uint64\_t\ \mbox{\hyperlink{class_l_i_n_1_1_master_a69115512e2bb3c9188755951213a9c45}{timeout}}\ =\ 5000000);}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_l_i_n_1_1_master_a20f70958ed75532ba672af1b780f59eb}{\string~Master}}();}
+\DoxyCodeLine{00092\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_l_i_n_1_1_master_a2028f1efbd54eb0c809992ef966a0671}{startSerial}}(HardwareSerial*\ serialPort);}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_l_i_n_1_1_master_a84572a2b7571fe8a74d6b83fb50f9fed}{requestData}}(uint8\_t*\ dataBuffer,\ uint8\_t\ \textcolor{keywordtype}{id});}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00106\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_l_i_n_1_1_master_a9ffb923bbbaf79a3fc5c562b90843c38}{transmitData}}(uint8\_t*\ data);}
+\DoxyCodeLine{00107\ }
+\DoxyCodeLine{00109\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_l_i_n_1_1_master_ae4ec9b6ac664cdc53034f38a37a265d7}{enable}}();}
+\DoxyCodeLine{00110\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00112\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_l_i_n_1_1_master_a2f135b023a2deef790c138e2df21ef26}{disable}}();}
+\DoxyCodeLine{00113\ \ \ \ \ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00114\ \ \ \ \ \ \ \ \ \ \ \ \ HardwareSerial*\ \mbox{\hyperlink{class_l_i_n_1_1_master_a2df55dc47f5fcc9306c017e2d03bc093}{\_serial}};}
+\DoxyCodeLine{00115\ \ \ \ \ \ \ \ \ \ \ \ \ uint32\_t\ \mbox{\hyperlink{class_l_i_n_1_1_master_ad6762f2b9d83daa723cdb374885dee5d}{baudRate}};}
+\DoxyCodeLine{00116\ \ \ \ \ \ \ \ \ \ \ \ \ uint8\_t*\ \mbox{\hyperlink{class_l_i_n_1_1_master_ac9ed45b4447966dfbd18a95f8a3eafbe}{\_incDataBuffer}};\ \textcolor{comment}{//will\ be\ dataSize\ +\ HEADER\_SIZE\ +\ crc\ byte}}
+\DoxyCodeLine{00117\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{class_l_i_n_1_1_master_a8769b227019aa02c38e04da1a4194276}{dataSize}};}
+\DoxyCodeLine{00118\ \ \ \ \ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{class_l_i_n_1_1_master_a69115512e2bb3c9188755951213a9c45}{timeout}};}
+\DoxyCodeLine{00119\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_l_i_n_1_1_master_aeda008bd1f4120907b29ad3bba94da48}{enabled}};}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{class_l_i_n_1_1_puppet}{LIN::Puppet}}*\ \mbox{\hyperlink{class_l_i_n_1_1_master_ad3c8ccf2236782a3d0143cbd1f645491}{masqueradingMaster}};}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_l_i_n_1_1_master_ab964b1d571725dea84cc13dd1563f4c0}{generateHeader}}(uint8\_t\ \textcolor{keywordtype}{id},\ uint8\_t*\ frame);}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_l_i_n_1_1_master_a860d0c734f842d8dd4e72c82cf7bb4be}{clearDataBuffer}}();}
+\DoxyCodeLine{00128\ \ \ \ \ \};}
+\DoxyCodeLine{00129\ \}}
+
+\end{DoxyCode}
