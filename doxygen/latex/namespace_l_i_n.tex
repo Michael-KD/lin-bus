@@ -1,0 +1,85 @@
+\hypertarget{namespace_l_i_n}{}\doxysection{LIN Namespace Reference}
+\label{namespace_l_i_n}\index{LIN@{LIN}}
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_l_i_n_1_1_master}{Master}}
+\item 
+class \mbox{\hyperlink{class_l_i_n_1_1_puppet}{Puppet}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{namespace_l_i_n_a7732f4fb927d639f5fbaa6efa71e7e17}{parity}} (uint8\+\_\+t id)
+\begin{DoxyCompactList}\small\item\em calculate the 2 parity bits (in msb and msb -\/ 1) from an id \end{DoxyCompactList}\item 
+uint8\+\_\+t \mbox{\hyperlink{namespace_l_i_n_a2e688b35c5028f2c1bc4ada9d0bed503}{CRC}} (uint8\+\_\+t $\ast$data, size\+\_\+t data\+Start, size\+\_\+t data\+Size)
+\begin{DoxyCompactList}\small\item\em generates a checksum for an array of data \end{DoxyCompactList}\item 
+int64\+\_\+t \mbox{\hyperlink{namespace_l_i_n_ad1560804e5bf973868a02aa127a2f1bd}{scan}} (uint64\+\_\+t pattern, uint64\+\_\+t data, uint64\+\_\+t pattern\+Mask, size\+\_\+t pattern\+Length)
+\begin{DoxyCompactList}\small\item\em Scans a 64-\/bit data buffer for a bit pattern. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{namespace_l_i_n_a2e688b35c5028f2c1bc4ada9d0bed503}\label{namespace_l_i_n_a2e688b35c5028f2c1bc4ada9d0bed503}} 
+\index{LIN@{LIN}!CRC@{CRC}}
+\index{CRC@{CRC}!LIN@{LIN}}
+\doxysubsubsection{\texorpdfstring{CRC()}{CRC()}}
+{\footnotesize\ttfamily uint8\+\_\+t LIN\+::\+CRC (\begin{DoxyParamCaption}\item[{uint8\+\_\+t $\ast$}]{data,  }\item[{size\+\_\+t}]{data\+Start,  }\item[{size\+\_\+t}]{data\+Size }\end{DoxyParamCaption})}
+
+
+
+generates a checksum for an array of data 
+
+
+\begin{DoxyParams}{Parameters}
+{\em data} & data buffer \\
+\hline
+{\em data\+Start} & the start index of the data \\
+\hline
+{\em data\+Size} & number of bytes in data \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+byte-\/long checksum for the data 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespace_l_i_n_a7732f4fb927d639f5fbaa6efa71e7e17}\label{namespace_l_i_n_a7732f4fb927d639f5fbaa6efa71e7e17}} 
+\index{LIN@{LIN}!parity@{parity}}
+\index{parity@{parity}!LIN@{LIN}}
+\doxysubsubsection{\texorpdfstring{parity()}{parity()}}
+{\footnotesize\ttfamily uint8\+\_\+t LIN\+::parity (\begin{DoxyParamCaption}\item[{uint8\+\_\+t}]{id }\end{DoxyParamCaption})}
+
+
+
+calculate the 2 parity bits (in msb and msb -\/ 1) from an id 
+
+
+\begin{DoxyParams}{Parameters}
+{\em id} & id \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the parity bits with 6 bits cleared for the actual id 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespace_l_i_n_ad1560804e5bf973868a02aa127a2f1bd}\label{namespace_l_i_n_ad1560804e5bf973868a02aa127a2f1bd}} 
+\index{LIN@{LIN}!scan@{scan}}
+\index{scan@{scan}!LIN@{LIN}}
+\doxysubsubsection{\texorpdfstring{scan()}{scan()}}
+{\footnotesize\ttfamily int64\+\_\+t LIN\+::scan (\begin{DoxyParamCaption}\item[{uint64\+\_\+t}]{pattern,  }\item[{uint64\+\_\+t}]{data,  }\item[{uint64\+\_\+t}]{pattern\+Mask,  }\item[{size\+\_\+t}]{pattern\+Length }\end{DoxyParamCaption})}
+
+
+
+Scans a 64-\/bit data buffer for a bit pattern. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em pattern} & pattern to scan for \\
+\hline
+{\em data} & data to scan \\
+\hline
+{\em pattern\+Mask} & masks out the pattern \\
+\hline
+{\em pattern\+Length} & number of bits in the pattern \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the offset by which data had to be shifted right to match with pattern; -\/1 if not found 
+\end{DoxyReturn}

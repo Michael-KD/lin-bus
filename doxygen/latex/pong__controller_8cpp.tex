@@ -1,0 +1,123 @@
+\hypertarget{pong__controller_8cpp}{}\doxysection{src/pong\+\_\+controller.cpp File Reference}
+\label{pong__controller_8cpp}\index{src/pong\_controller.cpp@{src/pong\_controller.cpp}}
+{\ttfamily \#include $<$Wire.\+h$>$}\newline
+{\ttfamily \#include $<$Adafruit\+\_\+\+GFX.\+h$>$}\newline
+{\ttfamily \#include $<$Adafruit\+\_\+\+SSD1306.\+h$>$}\newline
+{\ttfamily \#include $<$Arduino.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}lin.\+h\char`\"{}}\newline
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{pong__controller_8cpp_a4fc01d736fe50cf5b977f755b675f11d}{setup}} ()
+\item 
+void \mbox{\hyperlink{pong__controller_8cpp_afe461d27b9c48d5921c00d521181f12f}{loop}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+const uint32\+\_\+t \mbox{\hyperlink{pong__controller_8cpp_aad7e278a0fb6b9bd8306010a9354c06a}{BAUD\+\_\+\+RATE}} = 19200
+\item 
+const uint8\+\_\+t \mbox{\hyperlink{pong__controller_8cpp_aac15717b567a52be50fbcab3e5fd870a}{LIN\+\_\+\+RXD}} = 0
+\item 
+const uint8\+\_\+t \mbox{\hyperlink{pong__controller_8cpp_a850aafba8c3781b23a9e400b59c17b7c}{LIN\+\_\+\+TXD}} = 1
+\item 
+const uint8\+\_\+t \mbox{\hyperlink{pong__controller_8cpp_abefbdf3746282bf6727ab75e9c396546}{LIN\+\_\+\+MCP\+\_\+\+RESET}} = 2
+\item 
+const uint8\+\_\+t \mbox{\hyperlink{pong__controller_8cpp_aee959cda31edc50c8b3f0ff7b7a94cb1}{LIN\+\_\+\+CS}} = 3
+\item 
+const uint8\+\_\+t \mbox{\hyperlink{pong__controller_8cpp_a2c9091bdb3f7f49c18ed89466f56a194}{UP}} = 7
+\item 
+const uint8\+\_\+t \mbox{\hyperlink{pong__controller_8cpp_ab9ad7b315412ba63bd4f18ad212b4a83}{DOWN}} = 6
+\item 
+const uint8\+\_\+t \mbox{\hyperlink{pong__controller_8cpp_a8b02a8f6fb39c667e31c37ec3fd99a72}{PUPPET\+\_\+\+ID}} = 0x3b
+\item 
+size\+\_\+t \mbox{\hyperlink{pong__controller_8cpp_a3930a860f2ab6b333a98f75aac99e0d1}{data\+Length}} = 1
+\item 
+\mbox{\hyperlink{class_l_i_n_1_1_puppet}{LIN\+::\+Puppet}} $\ast$ \mbox{\hyperlink{pong__controller_8cpp_aa58c730e383d348a476138fcb1ff1de0}{puppet}}
+\item 
+uint8\+\_\+t \mbox{\hyperlink{pong__controller_8cpp_a39a067cd169642a9dc6f35d61e74a949}{button\+State}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{pong__controller_8cpp_afe461d27b9c48d5921c00d521181f12f}\label{pong__controller_8cpp_afe461d27b9c48d5921c00d521181f12f}} 
+\index{pong\_controller.cpp@{pong\_controller.cpp}!loop@{loop}}
+\index{loop@{loop}!pong\_controller.cpp@{pong\_controller.cpp}}
+\doxysubsubsection{\texorpdfstring{loop()}{loop()}}
+{\footnotesize\ttfamily void loop (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{pong__controller_8cpp_a4fc01d736fe50cf5b977f755b675f11d}\label{pong__controller_8cpp_a4fc01d736fe50cf5b977f755b675f11d}} 
+\index{pong\_controller.cpp@{pong\_controller.cpp}!setup@{setup}}
+\index{setup@{setup}!pong\_controller.cpp@{pong\_controller.cpp}}
+\doxysubsubsection{\texorpdfstring{setup()}{setup()}}
+{\footnotesize\ttfamily void setup (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{pong__controller_8cpp_aad7e278a0fb6b9bd8306010a9354c06a}\label{pong__controller_8cpp_aad7e278a0fb6b9bd8306010a9354c06a}} 
+\index{pong\_controller.cpp@{pong\_controller.cpp}!BAUD\_RATE@{BAUD\_RATE}}
+\index{BAUD\_RATE@{BAUD\_RATE}!pong\_controller.cpp@{pong\_controller.cpp}}
+\doxysubsubsection{\texorpdfstring{BAUD\_RATE}{BAUD\_RATE}}
+{\footnotesize\ttfamily const uint32\+\_\+t BAUD\+\_\+\+RATE = 19200}
+
+\mbox{\Hypertarget{pong__controller_8cpp_a39a067cd169642a9dc6f35d61e74a949}\label{pong__controller_8cpp_a39a067cd169642a9dc6f35d61e74a949}} 
+\index{pong\_controller.cpp@{pong\_controller.cpp}!buttonState@{buttonState}}
+\index{buttonState@{buttonState}!pong\_controller.cpp@{pong\_controller.cpp}}
+\doxysubsubsection{\texorpdfstring{buttonState}{buttonState}}
+{\footnotesize\ttfamily uint8\+\_\+t button\+State}
+
+\mbox{\Hypertarget{pong__controller_8cpp_a3930a860f2ab6b333a98f75aac99e0d1}\label{pong__controller_8cpp_a3930a860f2ab6b333a98f75aac99e0d1}} 
+\index{pong\_controller.cpp@{pong\_controller.cpp}!dataLength@{dataLength}}
+\index{dataLength@{dataLength}!pong\_controller.cpp@{pong\_controller.cpp}}
+\doxysubsubsection{\texorpdfstring{dataLength}{dataLength}}
+{\footnotesize\ttfamily size\+\_\+t data\+Length = 1}
+
+\mbox{\Hypertarget{pong__controller_8cpp_ab9ad7b315412ba63bd4f18ad212b4a83}\label{pong__controller_8cpp_ab9ad7b315412ba63bd4f18ad212b4a83}} 
+\index{pong\_controller.cpp@{pong\_controller.cpp}!DOWN@{DOWN}}
+\index{DOWN@{DOWN}!pong\_controller.cpp@{pong\_controller.cpp}}
+\doxysubsubsection{\texorpdfstring{DOWN}{DOWN}}
+{\footnotesize\ttfamily const uint8\+\_\+t DOWN = 6}
+
+\mbox{\Hypertarget{pong__controller_8cpp_aee959cda31edc50c8b3f0ff7b7a94cb1}\label{pong__controller_8cpp_aee959cda31edc50c8b3f0ff7b7a94cb1}} 
+\index{pong\_controller.cpp@{pong\_controller.cpp}!LIN\_CS@{LIN\_CS}}
+\index{LIN\_CS@{LIN\_CS}!pong\_controller.cpp@{pong\_controller.cpp}}
+\doxysubsubsection{\texorpdfstring{LIN\_CS}{LIN\_CS}}
+{\footnotesize\ttfamily const uint8\+\_\+t LIN\+\_\+\+CS = 3}
+
+\mbox{\Hypertarget{pong__controller_8cpp_abefbdf3746282bf6727ab75e9c396546}\label{pong__controller_8cpp_abefbdf3746282bf6727ab75e9c396546}} 
+\index{pong\_controller.cpp@{pong\_controller.cpp}!LIN\_MCP\_RESET@{LIN\_MCP\_RESET}}
+\index{LIN\_MCP\_RESET@{LIN\_MCP\_RESET}!pong\_controller.cpp@{pong\_controller.cpp}}
+\doxysubsubsection{\texorpdfstring{LIN\_MCP\_RESET}{LIN\_MCP\_RESET}}
+{\footnotesize\ttfamily const uint8\+\_\+t LIN\+\_\+\+MCP\+\_\+\+RESET = 2}
+
+\mbox{\Hypertarget{pong__controller_8cpp_aac15717b567a52be50fbcab3e5fd870a}\label{pong__controller_8cpp_aac15717b567a52be50fbcab3e5fd870a}} 
+\index{pong\_controller.cpp@{pong\_controller.cpp}!LIN\_RXD@{LIN\_RXD}}
+\index{LIN\_RXD@{LIN\_RXD}!pong\_controller.cpp@{pong\_controller.cpp}}
+\doxysubsubsection{\texorpdfstring{LIN\_RXD}{LIN\_RXD}}
+{\footnotesize\ttfamily const uint8\+\_\+t LIN\+\_\+\+RXD = 0}
+
+\mbox{\Hypertarget{pong__controller_8cpp_a850aafba8c3781b23a9e400b59c17b7c}\label{pong__controller_8cpp_a850aafba8c3781b23a9e400b59c17b7c}} 
+\index{pong\_controller.cpp@{pong\_controller.cpp}!LIN\_TXD@{LIN\_TXD}}
+\index{LIN\_TXD@{LIN\_TXD}!pong\_controller.cpp@{pong\_controller.cpp}}
+\doxysubsubsection{\texorpdfstring{LIN\_TXD}{LIN\_TXD}}
+{\footnotesize\ttfamily const uint8\+\_\+t LIN\+\_\+\+TXD = 1}
+
+\mbox{\Hypertarget{pong__controller_8cpp_aa58c730e383d348a476138fcb1ff1de0}\label{pong__controller_8cpp_aa58c730e383d348a476138fcb1ff1de0}} 
+\index{pong\_controller.cpp@{pong\_controller.cpp}!puppet@{puppet}}
+\index{puppet@{puppet}!pong\_controller.cpp@{pong\_controller.cpp}}
+\doxysubsubsection{\texorpdfstring{puppet}{puppet}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_l_i_n_1_1_puppet}{LIN\+::\+Puppet}}$\ast$ puppet}
+
+\mbox{\Hypertarget{pong__controller_8cpp_a8b02a8f6fb39c667e31c37ec3fd99a72}\label{pong__controller_8cpp_a8b02a8f6fb39c667e31c37ec3fd99a72}} 
+\index{pong\_controller.cpp@{pong\_controller.cpp}!PUPPET\_ID@{PUPPET\_ID}}
+\index{PUPPET\_ID@{PUPPET\_ID}!pong\_controller.cpp@{pong\_controller.cpp}}
+\doxysubsubsection{\texorpdfstring{PUPPET\_ID}{PUPPET\_ID}}
+{\footnotesize\ttfamily const uint8\+\_\+t PUPPET\+\_\+\+ID = 0x3b}
+
+\mbox{\Hypertarget{pong__controller_8cpp_a2c9091bdb3f7f49c18ed89466f56a194}\label{pong__controller_8cpp_a2c9091bdb3f7f49c18ed89466f56a194}} 
+\index{pong\_controller.cpp@{pong\_controller.cpp}!UP@{UP}}
+\index{UP@{UP}!pong\_controller.cpp@{pong\_controller.cpp}}
+\doxysubsubsection{\texorpdfstring{UP}{UP}}
+{\footnotesize\ttfamily const uint8\+\_\+t UP = 7}
+
