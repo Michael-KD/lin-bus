@@ -5,19 +5,6 @@
 namespace LIN {
     #define HEADER_SIZE 4
 
-    /// @brief prints an array of characters in hex, for debug
-    /// @param arr array
-    /// @param len length
-    void printArr(uint8_t* arr, size_t len);
-    
-    /// @brief prints a string (arduino, for debug)
-    /// @param str string
-    void print(String str);
-    
-    /// @brief prints an unsigned integer
-    /// @param i a uint64_t
-    void print(uint64_t i);
-    
     /// @brief calculate the 2 parity bits (in msb and msb - 1) from an id
     /// @param id id
     /// @return the parity bits with 6 bits cleared for the actual id
@@ -97,7 +84,8 @@ namespace LIN {
             /// @brief Construct a "master" process.
             /// @param baudRate the baud rate of the LIN port
             /// @param dataSize the number of bytes to be expected when receiving data
-            Master(uint32_t baudRate, size_t dataSize);
+            /// @param timeout the timeout for the data request process
+            Master(uint32_t baudRate, size_t dataSize, uint64_t timeout = 5000000);
 
             /// @brief Deconstructor
             ~Master();
@@ -127,6 +115,7 @@ namespace LIN {
             uint32_t baudRate;
             uint8_t* _incDataBuffer; //will be dataSize + HEADER_SIZE + crc byte
             size_t dataSize;
+            uint64_t timeout;
             bool enabled;
             /// funky guy
             LIN::Puppet* masqueradingMaster;
